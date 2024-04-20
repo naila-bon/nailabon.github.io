@@ -97,3 +97,10 @@ document.onmousemove = (e) => {
 
 //Start the 3D rendering
 animate();
+
+window.addEventListener('scroll', function() {
+  const scrollY = window.scrollY;
+  const movementX = scrollY / 100; // Adjust sensitivity as needed
+  const transform = `translate3d(${movementX}px, 0px, 0px)`;
+  document.getElementById('3d-container').style.transform = transform;
+});
