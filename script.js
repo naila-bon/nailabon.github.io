@@ -10,6 +10,10 @@ const scene = new THREE.Scene();
 //create a new camera with positions and angles
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
+//Keep track of the mouse position, so we can make the eye move
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+
 //Keep the 3D object on a global variable so we can access it later
 let object;
 
@@ -67,13 +71,15 @@ if (objToRender === "dino") {
 //Render the scene
 function animate() {
   requestAnimationFrame(animate);
+  //Here we could add some code to update the scene, adding some automatic movement
 
-  // Update camera position based on scroll
-  const scrollY = window.scrollY;
-  const movementX = scrollY / 100; // Adjust sensitivity as needed
-
-  // Update camera position on X-axis (left-right movement)
-  camera.position.x = movementX;;
+  //Make the eye move
+  if (object && objToRender === "eye") {
+    //I've played with the constants here until it looked good 
+    object.rotation.y = -3 + mouseX / window.innerWidth * 3;
+    object.rotation.x = -1.2 + mouseY * 2.5 / window.innerHeight;
+  }
+  renderer.render(scene, camera);
 }
 
 //Add a listener to the window, so we can resize the window and the camera
