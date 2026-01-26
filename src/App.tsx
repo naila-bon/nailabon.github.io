@@ -1,16 +1,9 @@
-import { useState } from 'react'
-import Book from './components/Book'
-import BookmarkMenu from './components/BookmarkMenu'
+import React from 'react';
+import Book from './components/Book/Book';
+import './App.css';
 
-function App() {
-  const [currentPage, setCurrentPage] = useState('about')
+const App: React.FC = () => {
+  return <Book />;
+};
 
-  return (
-    <div className="app">
-      <BookmarkMenu onSelect={setCurrentPage} />
-      <Book currentPage={currentPage} />
-    </div>
-  )
-}
-
-export default App
+export default App;
