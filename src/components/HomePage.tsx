@@ -100,17 +100,10 @@ export const HomePage = () => {
       {/* Header style panneau bois */}
       <Box as="header" mb={8}>
         <Container maxW="container.xl">
-          <Box 
-            bgGradient="linear(to-br, #8B4513, #A0522D)"
-            borderRadius="xl"
-            boxShadow="lg"
-            p={3}
-            border="3px solid"
-            borderColor="brown.700"
-          >
+          <CottageCard accentColor="brown.700">
             <HStack justify="space-between" wrap="wrap" gap={2}>
               {/* Logo */}
-              <HStack px={4}>
+              <HStack px={2}>
                 <Box color="yellow.200"><Home size={24} /></Box>
                 <Heading size="md" color="yellow.100" display={{ base: 'none', md: 'block' }}>Portfolio</Heading>
               </HStack>
@@ -185,7 +178,7 @@ export const HomePage = () => {
                 })}
               </VStack>
             )}
-          </Box>
+          </CottageCard>
         </Container>
       </Box>
 
