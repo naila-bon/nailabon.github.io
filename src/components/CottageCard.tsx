@@ -59,7 +59,7 @@ export const CottageCard = ({ children, accentColor = "brown.400" }: CottageCard
       <Box position="relative" zIndex={1}>
         {children}
       </Box>
-      {/* Effet de papier */}
+      {/* Effet de papier naturel */}
       <Box
         position="absolute"
         top={0}
@@ -67,7 +67,7 @@ export const CottageCard = ({ children, accentColor = "brown.400" }: CottageCard
         right={0}
         bottom={0}
         opacity={0.03}
-        bgGradient="linear(to-br, green.200, pink.200)"
+        bgGradient="linear(to-br, yellow.200, orange.200)"
         pointerEvents="none"
       />
     </Box>
