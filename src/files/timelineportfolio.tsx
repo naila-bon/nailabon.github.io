@@ -1,10 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Box, Container, Text, VStack, HStack, Badge, Circle } from '@chakra-ui/react';
-import { Rocket, Star, Zap, Code, Briefcase, Award, Calendar, MapPin } from 'lucide-react';
+import { Rocket, Star, Zap, Code, Briefcase, Award, MapPin } from 'lucide-react';
 
 const TimelinePortfolio = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeNode, setActiveNode] = useState(null);
+
+  const stars = useMemo(() => [...Array(100)].map(() => ({
+    width: Math.random() * 3,
+    height: Math.random() * 3,
+    top: Math.random() * 100,
+    left: Math.random() * 100,
+    opacity: Math.random() * 0.7 + 0.3,
+    animation: Math.random() * 3 + 2,
+    floatAnimation: Math.random() * 20 + 10,
+    floatOffset: Math.random() * 20 - 10
+  })), []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,7 +125,7 @@ const TimelinePortfolio = () => {
     }
   ];
 
-  const NodeCard = ({ node, index }) => {
+  const NodeCard = ({ node, index }: { node: { id: string; year: string; title: string; subtitle: string; icon: any; color: string; type: string; description: string; tech?: string[]; skills?: string[]; achievements?: string[]; impact?: string; }; index: number }) => {
     const isLeft = index % 2 === 0;
     const Icon = node.icon;
 
@@ -123,11 +133,11 @@ const TimelinePortfolio = () => {
       <Box
         position="relative"
         mb={32}
-        onMouseEnter={() => setActiveNode(node.id)}
-        onMouseLeave={() => setActiveNode(null)}
+        onMouseEnter={() => {}}
+        onMouseLeave={() => {}}
       >
         <HStack
-          spacing={0}
+          gap={0}
           justify="center"
           align="center"
           position="relative"
@@ -155,7 +165,7 @@ const TimelinePortfolio = () => {
                   boxShadow: `0 20px 60px ${node.color}40`
                 }}
               >
-                <VStack align="start" spacing={3}>
+                <VStack align="start" gap={3}>
                   <HStack justify="space-between" w="100%">
                     <Badge colorScheme="purple" fontSize="sm">{node.year}</Badge>
                     <Icon color={node.color} size={24} />
@@ -163,10 +173,10 @@ const TimelinePortfolio = () => {
                   <Text fontSize="2xl" fontWeight="bold">{node.title}</Text>
                   <Text fontSize="sm" color="whiteAlpha.700">{node.subtitle}</Text>
                   <Text fontSize="sm" color="whiteAlpha.600">{node.description}</Text>
-                  
+
                   {node.tech && (
-                    <HStack spacing={2} flexWrap="wrap">
-                      {node.tech.map(tech => (
+                    <HStack gap={2} flexWrap="wrap">
+                      {node.tech.map((tech: string) => (
                         <Badge key={tech} bg={node.color + '30'} color="white" fontSize="xs">
                           {tech}
                         </Badge>
@@ -175,9 +185,9 @@ const TimelinePortfolio = () => {
                   )}
 
                   {node.skills && (
-                    <VStack align="start" spacing={1}>
-                      {node.skills.map(skill => (
-                        <HStack key={skill} spacing={2}>
+                    <VStack align="start" gap={1}>
+                      {node.skills.map((skill: string) => (
+                        <HStack key={skill} gap={2}>
                           <Box w="2px" h="2px" bg={node.color} borderRadius="full" />
                           <Text fontSize="xs" color="whiteAlpha.700">{skill}</Text>
                         </HStack>
@@ -186,9 +196,9 @@ const TimelinePortfolio = () => {
                   )}
 
                   {node.achievements && (
-                    <VStack align="start" spacing={1}>
-                      {node.achievements.map((achievement, idx) => (
-                        <HStack key={idx} spacing={2}>
+                    <VStack align="start" gap={1}>
+                      {node.achievements.map((achievement: string, idx: number) => (
+                        <HStack key={idx} gap={2}>
                           <Box w="2px" h="2px" bg={node.color} borderRadius="full" />
                           <Text fontSize="xs" color="whiteAlpha.700">{achievement}</Text>
                         </HStack>
@@ -232,12 +242,6 @@ const TimelinePortfolio = () => {
               borderColor={node.color + '60'}
               borderRadius="50%"
               animation="rotate 20s linear infinite"
-              sx={{
-                '@keyframes rotate': {
-                  from: { transform: 'translate(-50%, -50%) rotate(0deg)' },
-                  to: { transform: 'translate(-50%, -50%) rotate(360deg)' }
-                }
-              }}
             />
             <Box
               position="absolute"
@@ -278,7 +282,7 @@ const TimelinePortfolio = () => {
                   boxShadow: `0 20px 60px ${node.color}40`
                 }}
               >
-                <VStack align="start" spacing={3}>
+                <VStack align="start" gap={3}>
                   <HStack justify="space-between" w="100%">
                     <Badge colorScheme="purple" fontSize="sm">{node.year}</Badge>
                     <Icon color={node.color} size={24} />
@@ -286,10 +290,10 @@ const TimelinePortfolio = () => {
                   <Text fontSize="2xl" fontWeight="bold">{node.title}</Text>
                   <Text fontSize="sm" color="whiteAlpha.700">{node.subtitle}</Text>
                   <Text fontSize="sm" color="whiteAlpha.600">{node.description}</Text>
-                  
+
                   {node.tech && (
-                    <HStack spacing={2} flexWrap="wrap">
-                      {node.tech.map(tech => (
+                    <HStack gap={2} flexWrap="wrap">
+                      {node.tech.map((tech: string) => (
                         <Badge key={tech} bg={node.color + '30'} color="white" fontSize="xs">
                           {tech}
                         </Badge>
@@ -298,9 +302,9 @@ const TimelinePortfolio = () => {
                   )}
 
                   {node.skills && (
-                    <VStack align="start" spacing={1}>
-                      {node.skills.map(skill => (
-                        <HStack key={skill} spacing={2}>
+                    <VStack align="start" gap={1}>
+                      {node.skills.map((skill: string) => (
+                        <HStack key={skill} gap={2}>
                           <Box w="2px" h="2px" bg={node.color} borderRadius="full" />
                           <Text fontSize="xs" color="whiteAlpha.700">{skill}</Text>
                         </HStack>
@@ -309,9 +313,9 @@ const TimelinePortfolio = () => {
                   )}
 
                   {node.achievements && (
-                    <VStack align="start" spacing={1}>
-                      {node.achievements.map((achievement, idx) => (
-                        <HStack key={idx} spacing={2}>
+                    <VStack align="start" gap={1}>
+                      {node.achievements.map((achievement: string, idx: number) => (
+                        <HStack key={idx} gap={2}>
                           <Box w="2px" h="2px" bg={node.color} borderRadius="full" />
                           <Text fontSize="xs" color="whiteAlpha.700">{achievement}</Text>
                         </HStack>
@@ -352,28 +356,18 @@ const TimelinePortfolio = () => {
     <Box minH="100vh" bg="#0a0e1a" color="white" position="relative" overflow="hidden">
       {/* Fond étoilé animé */}
       <Box position="fixed" top={0} left={0} right={0} bottom={0} pointerEvents="none">
-        {[...Array(100)].map((_, i) => (
+        {stars.map((star, i) => (
           <Box
             key={i}
             position="absolute"
-            width={`${Math.random() * 3}px`}
-            height={`${Math.random() * 3}px`}
+            width={`${star.width}px`}
+            height={`${star.height}px`}
             bg="white"
             borderRadius="50%"
-            top={`${Math.random() * 100}%`}
-            left={`${Math.random() * 100}%`}
-            opacity={Math.random() * 0.7 + 0.3}
-            animation={`twinkle ${Math.random() * 3 + 2}s infinite, float ${Math.random() * 20 + 10}s infinite`}
-            sx={{
-              '@keyframes twinkle': {
-                '0%, 100%': { opacity: 0.3 },
-                '50%': { opacity: 1 }
-              },
-              '@keyframes float': {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: `translateY(${Math.random() * 20 - 10}px)` }
-              }
-            }}
+            top={`${star.top}%`}
+            left={`${star.left}%`}
+            opacity={star.opacity}
+            animation={`twinkle ${star.animation}s infinite, float ${star.floatAnimation}s infinite`}
           />
         ))}
       </Box>
@@ -399,8 +393,8 @@ const TimelinePortfolio = () => {
 
       {/* Header */}
       <Container maxW="1400px" py={16}>
-        <VStack spacing={4} mb={20}>
-          <HStack spacing={3}>
+        <VStack gap={4} mb={20}>
+          <HStack gap={3}>
             <Star color="#ffd93d" size={36} fill="#ffd93d" />
             <Text 
               fontSize="5xl" 
@@ -425,7 +419,7 @@ const TimelinePortfolio = () => {
         </Box>
 
         {/* Footer */}
-        <VStack spacing={4} py={16} opacity={0.6}>
+        <VStack gap={4} py={16} opacity={0.6}>
           <Text fontSize="2xl">✨</Text>
           <Text fontSize="sm" color="whiteAlpha.600">
             Fin de la timeline • Prêt pour de nouvelles aventures

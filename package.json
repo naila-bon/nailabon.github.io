@@ -13,18 +13,19 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@chakra-ui/modal": "^2.3.1",
+    "@chakra-ui/progress": "^2.2.0",
     "@chakra-ui/react": "^3.31.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@tanstack/react-router": "^1.157.10",
     "framer-motion": "^12.29.2",
     "lucide-react": "^0.563.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-pageflip": "^2.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@tanstack/react-router-devtools": "^1.157.15",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
