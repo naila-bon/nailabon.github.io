@@ -18,12 +18,11 @@ export interface PageData {
 }
 
 export const pages: PageData[] = [
-  { type: 'cover', title: 'Mon Journal', subtitle: 'BUT Informatique S6', author: 'Ton Nom' },
   {
     type: 'intro',
     title: 'Coucou !',
     content: 'Bienvenue dans mon portfolio. Ici, pas de jargon compliqué, juste mon parcours et mes créations.',
-    photo: 'https://via.placeholder.com/150' // Remplace par ta photo
+    photo: 'https://picsum.photos/150' // Remplace par ta photo
   },
   {
     type: 'skills',
@@ -41,8 +40,7 @@ export const pages: PageData[] = [
       { date: '2023', title: 'Projet Universitaire', desc: 'Création d\'un site de gestion.' }
     ]
   },
-  { type: 'contact', title: 'On reste en contact ?' },
-  { type: 'back-cover' }
+  { type: 'contact', title: 'On reste en contact ?' }
 ];
 
-export const navigationLabels = ['Cover', 'Intro', 'Skills', 'Experience', 'Contact', 'Back Cover'];
+export const navigationLabels = ['Intro', 'Skills', 'Experience', 'Contact'];
