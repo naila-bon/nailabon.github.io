@@ -96,95 +96,102 @@ export const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <Box minH="100vh" bgGradient="linear(to-br, yellow.100, orange.50, brown.100)" py={8} px={4}>
+    <Box minH="100vh" bgGradient="linear(to-br, yellow.100, orange.50, brown.100)" py={4} px={4}>
       {/* Header style panneau bois */}
-      <Box as="header" mb={8}>
-        <Container maxW="container.xl">
-          <CottageCard accentColor="brown.700">
-            <HStack justify="space-between" wrap="wrap" gap={2}>
-              {/* Logo */}
-              <HStack px={2}>
-                <Box color="yellow.200"><Home size={24} /></Box>
-                <Heading size="md" color="yellow.100" display={{ base: 'none', md: 'block' }}>Portfolio</Heading>
-              </HStack>
-
-              {/* Menu desktop */}
-              <HStack gap={2} display={{ base: 'none', md: 'flex' }}>
-                {Object.entries(sections).map(([key, section]) => {
-                  const IconComponent = section.icon
-                  return (
-                    <Button
-                      key={key}
-                      onClick={() => setActiveSection(key as keyof typeof sections)}
-                      variant={activeSection === key ? "solid" : "ghost"}
-                      colorScheme={activeSection === key ? "orange" : "gray"}
-                      borderRadius="lg"
-                      size="sm"
-                      cursor="pointer"
-                      bg={activeSection === key ? "orange.500" : "transparent"}
-                      color="white"
-                      _hover={{ bg: activeSection === key ? "orange.600" : "whiteAlpha.200" }}
-                    >
-                      <HStack>
-                        <Box color="white"><IconComponent size={16} /></Box>
-                        <Text>{section.title}</Text>
-                      </HStack>
-                    </Button>
-                  )
-                })}
-              </HStack>
-
-              {/* Menu mobile toggle */}
-              <Button
-                variant="ghost"
-                borderRadius="lg"
-                display={{ base: 'flex', md: 'none' }}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                cursor="pointer"
-                color="white"
-                _hover={{ bg: "whiteAlpha.200" }}
-              >
-                <Box color="yellow.200">{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</Box>
-              </Button>
+      <Container maxW="container.xl" mb={4}>
+        <CottageCard accentColor="brown.700">
+          <HStack justify="space-between" wrap="wrap" gap={2}>
+            {/* Logo */}
+            <HStack px={2}>
+              <Box color="yellow.200"><Home size={24} /></Box>
+              <Heading size="md" color="yellow.100" display={{ base: 'none', md: 'block' }}>Portfolio</Heading>
             </HStack>
 
-            {/* Menu mobile dropdown */}
-            {isMenuOpen && (
-              <VStack mt={3} gap={2} display={{ base: 'flex', md: 'none' }}>
-                {Object.entries(sections).map(([key, section]) => {
-                  const IconComponent = section.icon
-                  return (
-                    <Button
-                      key={key}
-                      onClick={() => {
-                        setActiveSection(key as keyof typeof sections)
-                        setIsMenuOpen(false)
-                      }}
-                      variant={activeSection === key ? "solid" : "ghost"}
-                      colorScheme={activeSection === key ? "orange" : "gray"}
-                      w="full"
-                      borderRadius="lg"
-                      cursor="pointer"
-                      bg={activeSection === key ? "orange.500" : "transparent"}
-                      color="white"
-                      _hover={{ bg: activeSection === key ? "orange.600" : "whiteAlpha.200" }}
-                    >
-                      <HStack>
-                        <Box color="white"><IconComponent size={16} /></Box>
-                        <Text>{section.title}</Text>
-                      </HStack>
-                    </Button>
-                  )
-                })}
-              </VStack>
-            )}
-          </CottageCard>
-        </Container>
-      </Box>
+            {/* Menu desktop */}
+            <HStack gap={2} display={{ base: 'none', md: 'flex' }}>
+              {Object.entries(sections).map(([key, section]) => {
+                const IconComponent = section.icon
+                return (
+                  <Button
+                    key={key}
+                    onClick={() => setActiveSection(key as keyof typeof sections)}
+                    variant={activeSection === key ? "solid" : "ghost"}
+                    colorScheme={activeSection === key ? "orange" : "gray"}
+                    borderRadius="lg"
+                    size="sm"
+                    cursor="pointer"
+                    bg={activeSection === key ? "orange.500" : "transparent"}
+                    color="white"
+                    _hover={{ bg: activeSection === key ? "orange.600" : "whiteAlpha.200" }}
+                  >
+                    <HStack>
+                      <Box color="white"><IconComponent size={16} /></Box>
+                      <Text>{section.title}</Text>
+                    </HStack>
+                  </Button>
+                )
+              })}
+            </HStack>
 
-      {/* Main Content - Wood Card avec contenu papier */}
-      <Container maxW="container.lg">
-        <CottageCard accentColor="brown.700">
+            {/* Menu mobile toggle */}
+            <Button
+              variant="ghost"
+              borderRadius="lg"
+              display={{ base: 'flex', md: 'none' }}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              cursor="pointer"
+              color="white"
+              _hover={{ bg: "whiteAlpha.200" }}
+            >
+              <Box color="yellow.200">{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</Box>
+            </Button>
+          </HStack>
+
+          {/* Menu mobile dropdown */}
+          {isMenuOpen && (
+            <VStack mt={3} gap={2} display={{ base: 'flex', md: 'none' }}>
+              {Object.entries(sections).map(([key, section]) => {
+                const IconComponent = section.icon
+                return (
+                  <Button
+                    key={key}
+                    onClick={() => {
+                      setActiveSection(key as keyof typeof sections)
+                      setIsMenuOpen(false)
+                    }}
+                    variant={activeSection === key ? "solid" : "ghost"}
+                    colorScheme={activeSection === key ? "orange" : "gray"}
+                    w="full"
+                    borderRadius="lg"
+                    cursor="pointer"
+                    bg={activeSection === key ? "orange.500" : "transparent"}
+                    color="white"
+                    _hover={{ bg: activeSection === key ? "orange.600" : "whiteAlpha.200" }}
+                  >
+                    <HStack>
+                      <Box color="white"><IconComponent size={16} /></Box>
+                      <Text>{section.title}</Text>
+                    </HStack>
+                  </Button>
+                )
+              })}
+            </VStack>
+          )}
+        </CottageCard>
+      </Container>
+
+      {/* Decorative crossbars - like a panel */}
+      <Container maxW="container.xl" mb={4}>
+        <HStack gap={2}>
+          <Box flex={1} h="12px" bg="#5D3A1A" borderRadius="full" border="2px solid" borderColor="brown.700" />
+          <Box w="20px" h="20px" bg="#5D3A1A" borderRadius="full" border="3px solid" borderColor="brown.700" />
+          <Box flex={1} h="12px" bg="#5D3A1A" borderRadius="full" border="2px solid" borderColor="brown.700" />
+        </HStack>
+      </Container>
+
+      {/* Main Content - Wood Card avec contenu papier - takes remaining height */}
+      <Container maxW="container.lg" flex={1} display="flex" flexDirection="column">
+        <CottageCard accentColor="brown.700" flex={1} minH="calc(100vh - 200px)">
           {/* Section Header */}
           <Box textAlign="center" mb={6} pb={4} borderBottom="2px dashed" borderColor="brown.300">
             <HStack justify="center" gap={3}>
@@ -199,7 +206,7 @@ export const HomePage = () => {
           </Box>
 
           {/* Section Content - dans papier */}
-          <Box minH="300px">
+          <Box flex={1}>
             <PaperContent>
               {sections[activeSection].content}
             </PaperContent>
@@ -215,7 +222,7 @@ export const HomePage = () => {
       </Container>
 
       {/* Footer */}
-      <Box as="footer" mt={8} textAlign="center">
+      <Box as="footer" mt={4} textAlign="center" pb={4}>
         <Text color="brown.500" fontSize="sm">© 2024 - Portfolio Nature</Text>
       </Box>
     </Box>

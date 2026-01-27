@@ -41,9 +41,11 @@ export const DecorativeCorners = ({ color = "brown.700" }: DecorativeCornersProp
 interface CottageCardProps {
   children: React.ReactNode
   accentColor?: string
+  flex?: number
+  minH?: string
 }
 
-export const CottageCard = ({ children, accentColor = "brown.700" }: CottageCardProps) => {
+export const CottageCard = ({ children, accentColor = "brown.700", flex, minH }: CottageCardProps) => {
   return (
     <Box
       position="relative"
@@ -54,6 +56,8 @@ export const CottageCard = ({ children, accentColor = "brown.700" }: CottageCard
       borderColor={accentColor}
       p={4}
       overflow="hidden"
+      flex={flex}
+      minH={minH}
     >
       {/* Wood texture */}
       <Box
