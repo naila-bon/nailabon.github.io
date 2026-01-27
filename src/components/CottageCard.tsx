@@ -47,7 +47,7 @@ export const CottageCard = ({ children, accentColor = "brown.700" }: CottageCard
   return (
     <Box
       position="relative"
-      bg="#8B5A2B"
+      bg="#5D3A1A"
       borderRadius="2xl"
       boxShadow="2xl"
       border="4px solid"
