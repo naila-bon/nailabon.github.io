@@ -2,6 +2,7 @@ import { Box, Container, Heading, Text, VStack, HStack, Button, Link as ChakraLi
 import { Home, Briefcase, Code2, Mail, Github, Linkedin, FileText, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { CottageCard } from './CottageCard'
+import { PaperContent } from './PaperContent'
 
 // Sections content
 const sections = {
@@ -14,8 +15,8 @@ const sections = {
         <Text color="brown.600">
           Présentez-vous ici : votre parcours, vos motivations, ce qui vous passionne dans l'informatique...
         </Text>
-        <Box w="full" h="200px" bg="orange.50" borderRadius="lg" border="2px dashed" borderColor="orange.300" display="flex" alignItems="center" justifyContent="center">
-          <Text color="orange.500" fontStyle="italic">Votre CV sera intégré ici</Text>
+        <Box w="full" h="200px" bg="white" borderRadius="md" border="2px dashed" borderColor="brown.300" display="flex" alignItems="center" justifyContent="center">
+          <Text color="brown.400" fontStyle="italic">Votre CV sera intégré ici</Text>
         </Box>
         <Button colorScheme="orange" size="sm">Télécharger mon CV</Button>
       </VStack>
@@ -32,7 +33,7 @@ const sections = {
         </Text>
         <HStack gap={3} wrap="wrap">
           {['React', 'TypeScript', 'Chakra UI', 'Node.js', 'Python', 'SQL', 'Git'].map((skill) => (
-            <Box key={skill} bg="orange.100" px={4} py={2} borderRadius="full" color="brown.700" fontWeight="medium" border="2px solid" borderColor="orange.300">
+            <Box key={skill} bg="white" px={4} py={2} borderRadius="full" color="brown.700" fontWeight="medium" border="2px solid" borderColor="brown.300" boxShadow="sm">
               {skill}
             </Box>
           ))}
@@ -49,11 +50,11 @@ const sections = {
         <Text color="brown.600">
           Présentez vos projets avec descriptions et liens...
         </Text>
-        <Box w="full" p={4} bg="orange.50" borderRadius="lg" border="2px solid" borderColor="orange.200">
+        <Box w="full" p={4} bg="white" borderRadius="md" border="2px solid" borderColor="brown.200" boxShadow="sm">
           <Heading size="sm" color="brown.600" mb={2}>Projet 1</Heading>
           <Text fontSize="sm" color="brown.500">Description du projet...</Text>
         </Box>
-        <Box w="full" p={4} bg="orange.50" borderRadius="lg" border="2px solid" borderColor="orange.200">
+        <Box w="full" p={4} bg="white" borderRadius="md" border="2px solid" borderColor="brown.200" boxShadow="sm">
           <Heading size="sm" color="brown.600" mb={2}>Projet 2</Heading>
           <Text fontSize="sm" color="brown.500">Description du projet...</Text>
         </Box>
@@ -69,7 +70,7 @@ const sections = {
         <Text color="brown.600">
           Laissez vos informations pour que les recruteurs puissent vous joindre...
         </Text>
-        <Box w="full" p={4} bg="orange.50" borderRadius="lg">
+        <Box w="full" p={4} bg="white" borderRadius="md">
           <VStack gap={3}>
             <ChakraLink href="https://github.com/votre-github" target="_blank" color="orange.500" fontWeight="medium">
               <HStack>
@@ -96,22 +97,22 @@ export const HomePage = () => {
 
   return (
     <Box minH="100vh" bgGradient="linear(to-br, yellow.100, orange.50, brown.100)" py={8} px={4}>
-      {/* Header avec menu hamburger mobile */}
+      {/* Header style panneau bois */}
       <Box as="header" mb={8}>
         <Container maxW="container.xl">
           <Box 
-            bg="white" 
-            borderRadius="full" 
-            boxShadow="lg" 
+            bgGradient="linear(to-br, #8B4513, #A0522D)"
+            borderRadius="xl"
+            boxShadow="lg"
             p={3}
             border="3px solid"
-            borderColor="brown.400"
+            borderColor="brown.700"
           >
             <HStack justify="space-between" wrap="wrap" gap={2}>
               {/* Logo */}
               <HStack px={4}>
-                <Box color="orange.500"><Home size={24} /></Box>
-                <Heading size="md" color="brown.600" display={{ base: 'none', md: 'block' }}>Portfolio</Heading>
+                <Box color="yellow.200"><Home size={24} /></Box>
+                <Heading size="md" color="yellow.100" display={{ base: 'none', md: 'block' }}>Portfolio</Heading>
               </HStack>
 
               {/* Menu desktop */}
@@ -124,12 +125,15 @@ export const HomePage = () => {
                       onClick={() => setActiveSection(key as keyof typeof sections)}
                       variant={activeSection === key ? "solid" : "ghost"}
                       colorScheme={activeSection === key ? "orange" : "gray"}
-                      borderRadius="full"
+                      borderRadius="lg"
                       size="sm"
                       cursor="pointer"
+                      bg={activeSection === key ? "orange.500" : "transparent"}
+                      color="white"
+                      _hover={{ bg: activeSection === key ? "orange.600" : "whiteAlpha.200" }}
                     >
                       <HStack>
-                        <Box color={activeSection === key ? "white" : "brown.600"}><IconComponent size={16} /></Box>
+                        <Box color="white"><IconComponent size={16} /></Box>
                         <Text>{section.title}</Text>
                       </HStack>
                     </Button>
@@ -140,12 +144,14 @@ export const HomePage = () => {
               {/* Menu mobile toggle */}
               <Button
                 variant="ghost"
-                borderRadius="full"
+                borderRadius="lg"
                 display={{ base: 'flex', md: 'none' }}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 cursor="pointer"
+                color="white"
+                _hover={{ bg: "whiteAlpha.200" }}
               >
-                <Box color="brown.600">{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</Box>
+                <Box color="yellow.200">{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</Box>
               </Button>
             </HStack>
 
@@ -166,9 +172,12 @@ export const HomePage = () => {
                       w="full"
                       borderRadius="lg"
                       cursor="pointer"
+                      bg={activeSection === key ? "orange.500" : "transparent"}
+                      color="white"
+                      _hover={{ bg: activeSection === key ? "orange.600" : "whiteAlpha.200" }}
                     >
                       <HStack>
-                        <Box color={activeSection === key ? "white" : "brown.600"}><IconComponent size={16} /></Box>
+                        <Box color="white"><IconComponent size={16} /></Box>
                         <Text>{section.title}</Text>
                       </HStack>
                     </Button>
@@ -180,13 +189,13 @@ export const HomePage = () => {
         </Container>
       </Box>
 
-      {/* Main Content - Cottage Card */}
+      {/* Main Content - Wood Card avec contenu papier */}
       <Container maxW="container.lg">
-        <CottageCard accentColor="brown.400">
-          {/* Section Header dans la carte */}
-          <Box textAlign="center" mb={6} pb={4} borderBottom="2px dashed" borderColor="orange.200">
+        <CottageCard accentColor="brown.700">
+          {/* Section Header */}
+          <Box textAlign="center" mb={6} pb={4} borderBottom="2px dashed" borderColor="brown.300">
             <HStack justify="center" gap={3}>
-              <Box color="orange.500">
+              <Box color="brown.600">
                 {(() => {
                   const IconComp = sections[activeSection].icon
                   return <IconComp size={32} />
@@ -196,14 +205,16 @@ export const HomePage = () => {
             </HStack>
           </Box>
 
-          {/* Section Content */}
+          {/* Section Content - dans papier */}
           <Box minH="300px">
-            {sections[activeSection].content}
+            <PaperContent>
+              {sections[activeSection].content}
+            </PaperContent>
           </Box>
 
-          {/* Decorative footer in card */}
-          <Box mt={6} pt={4} borderTop="2px dashed" borderColor="orange.200" textAlign="center">
-            <Text fontSize="sm" color="brown.400" fontStyle="italic">
+          {/* Decorative footer */}
+          <Box mt={6} pt={4} borderTop="2px dashed" borderColor="brown.300" textAlign="center">
+            <Text fontSize="sm" color="brown.500" fontStyle="italic">
               ✦ Portfolio BUT ✦
             </Text>
           </Box>
