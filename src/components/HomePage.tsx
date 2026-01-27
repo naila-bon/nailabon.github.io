@@ -5,9 +5,9 @@ import { Home, User, Mail } from 'lucide-react'
 
 export const HomePage = () => {
   return (
-    <Box minH="100vh" bg="gray.50">
+    <Box height="100vh" width="100%" bg="gray.50" display="flex" flexDirection="column">
       {/* Header */}
-      <Box as="header" bg="white" shadow="sm" py={4}>
+      <Box as="header" bg="white" shadow="sm" py={4} position="sticky" top={0} zIndex={10}>
         <Container maxW="container.xl">
           <HStack justify="space-between">
             <HStack>
@@ -23,7 +23,7 @@ export const HomePage = () => {
       </Box>
 
       {/* Main Content */}
-      <Container maxW="container.xl" py={10}>
+      <Container maxW="container.xl" py={10} overflow="auto" flex={1}>
         <VStack gap={8} align="center">
           <Heading size="2xl" textAlign="center" color="gray.800">
             Welcome to My App
@@ -44,7 +44,7 @@ export const HomePage = () => {
       </Container>
 
       {/* Footer */}
-      <Box as="footer" bg="gray.800" color="white" py={6} mt={10}>
+      <Box as="footer" bg="gray.800" color="white" py={6} position="fixed" bottom={0} left={0} right={0}>
         <Container maxW="container.xl">
           <Text textAlign="center">© 2024 My App. Built with love.</Text>
         </Container>
