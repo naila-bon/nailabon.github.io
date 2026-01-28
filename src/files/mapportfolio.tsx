@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
-import { Box, Container, Text, VStack, HStack, Badge, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Grid, Button } from '@chakra-ui/react';
-import { Map, Zap, Code, Database, Palette, Globe, Star, Award } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Box, Container, Text, VStack, HStack, Badge, Grid } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/modal';
+import { Map, Zap, Database, Palette, Globe, Star, Award } from 'lucide-react';
+
+type Region = {
+  id: string;
+  name: string;
+  icon: any;
+  color: string;
+  level: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  projects: Array<{
+    name: string;
+    tech: string;
+    impact: string;
+  }>;
+  skills: string[];
+};
 
 const MapPortfolio = () => {
-  const [selectedRegion, setSelectedRegion] = useState(null);
-  const [hoveredRegion, setHoveredRegion] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stars = useMemo(() => [...Array(50)].map(() => ({
+    top: Math.random() * 100,
+    left: Math.random() * 100,
+    opacity: Math.random() * 0.7 + 0.3,
+    animation: Math.random() * 3 + 2
+  })), []);
 
   const regions = [
     {
@@ -77,7 +104,7 @@ const MapPortfolio = () => {
     }
   ];
 
-  const getRegionPath = (region) => {
+  const getRegionPath = (region: Region) => {
     const { x, y, width, height } = region;
     // Créer une forme organique avec des courbes
     return `M ${x} ${y + height * 0.3} 
@@ -99,7 +126,7 @@ const MapPortfolio = () => {
       overflow="hidden"
     >
       {/* Étoiles en arrière-plan */}
-      {[...Array(50)].map((_, i) => (
+      {stars.map((star, i) => (
         <Box
           key={i}
           position="absolute"
@@ -107,23 +134,17 @@ const MapPortfolio = () => {
           height="2px"
           bg="white"
           borderRadius="50%"
-          top={`${Math.random() * 100}%`}
-          left={`${Math.random() * 100}%`}
-          opacity={Math.random() * 0.7 + 0.3}
-          animation={`twinkle ${Math.random() * 3 + 2}s infinite`}
-          sx={{
-            '@keyframes twinkle': {
-              '0%, 100%': { opacity: 0.3 },
-              '50%': { opacity: 1 }
-            }
-          }}
+          top={`${star.top}%`}
+          left={`${star.left}%`}
+          opacity={star.opacity}
+          animation={`twinkle ${star.animation}s infinite`}
         />
       ))}
 
       <Container maxW="1400px" py={8}>
-        <VStack spacing={8} align="stretch">
+        <VStack gap={8} align="stretch">
           {/* Header */}
-          <VStack spacing={2}>
+          <VStack gap={2}>
             <HStack>
               <Map color="#ffd93d" size={36} />
               <Text 
@@ -193,7 +214,7 @@ const MapPortfolio = () => {
                         }}
                         onMouseEnter={() => setHoveredRegion(region.id)}
                         onMouseLeave={() => setHoveredRegion(null)}
-                        onClick={() => setSelectedRegion(region)}
+                        onClick={() => setSelectedRegion(region as Region)}
                       />
 
                       {/* Label */}
@@ -241,18 +262,18 @@ const MapPortfolio = () => {
               </svg>
 
               {/* Legend */}
-              <HStack 
-                position="absolute" 
-                bottom={4} 
-                right={4} 
-                bg="rgba(0,0,0,0.7)" 
-                p={3} 
+              <HStack
+                position="absolute"
+                bottom={4}
+                right={4}
+                bg="rgba(0,0,0,0.7)"
+                p={3}
                 borderRadius="lg"
-                spacing={4}
+                gap={4}
                 backdropFilter="blur(10px)"
               >
                 {regions.map(region => (
-                  <HStack key={region.id} spacing={2}>
+                  <HStack key={region.id} gap={2}>
                     <Box w="12px" h="12px" bg={region.color} borderRadius="sm" />
                     <Text color="white" fontSize="xs">{region.name}</Text>
                   </HStack>
@@ -299,14 +320,14 @@ const MapPortfolio = () => {
         <ModalOverlay backdropFilter="blur(10px)" />
         <ModalContent bg="gray.900" color="white">
           <ModalHeader>
-            <HStack>
+            <HStack gap={3}>
               {selectedRegion && React.createElement(selectedRegion.icon, { color: selectedRegion.color, size: 28 })}
               <Text>{selectedRegion?.name}</Text>
             </HStack>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <VStack align="stretch" spacing={6}>
+            <VStack align="stretch" gap={6}>
               {/* Progression */}
               <Box>
                 <HStack justify="space-between" mb={2}>
@@ -326,7 +347,7 @@ const MapPortfolio = () => {
               {/* Compétences */}
               <Box>
                 <Text fontSize="sm" color="whiteAlpha.700" mb={2}>Compétences maîtrisées</Text>
-                <HStack spacing={2} flexWrap="wrap">
+                <HStack gap={2} flexWrap="wrap">
                   {selectedRegion?.skills.map(skill => (
                     <Badge key={skill} bg={selectedRegion.color + '30'} color={selectedRegion.color} px={3} py={1}>
                       {skill}
@@ -338,7 +359,7 @@ const MapPortfolio = () => {
               {/* Projets */}
               <Box>
                 <Text fontSize="lg" fontWeight="bold" mb={3}>Projets Réalisés</Text>
-                <VStack align="stretch" spacing={3}>
+                <VStack align="stretch" gap={3}>
                   {selectedRegion?.projects.map((project, idx) => (
                     <Box 
                       key={idx}
@@ -348,7 +369,7 @@ const MapPortfolio = () => {
                       borderLeft="3px solid"
                       borderLeftColor={selectedRegion.color}
                     >
-                      <HStack justify="space-between" mb={2}>
+                      <HStack justify="space-between" mb={2} gap={2}>
                         <Text fontWeight="bold">{project.name}</Text>
                         <Award color={selectedRegion.color} size={18} />
                       </HStack>

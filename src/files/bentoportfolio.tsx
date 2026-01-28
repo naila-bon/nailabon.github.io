@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
-import { Box, Container, Text, VStack, HStack, Grid, GridItem, Image, Badge, Button, IconButton, Input, Textarea, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-import { User, Briefcase, Code, Mail, Download, Github, Linkedin, ExternalLink, Star, Zap, Award, Send } from 'lucide-react';
+import { useState } from 'react';
+import { Box, Container, Text, VStack, HStack, Grid, GridItem, Image, Badge, Button, IconButton, Input, Textarea } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/modal';
+import { Code, Mail, Download, Github, Linkedin, ExternalLink, Zap, Award, Send } from 'lucide-react';
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  tech: string[];
+  image: string;
+  color: string;
+  impact: string;
+  link: string;
+}
 
 const BentoPortfolio = () => {
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const skills = [
     { name: 'React & TypeScript', level: 95, icon: '⚛️' },
@@ -66,8 +78,6 @@ const BentoPortfolio = () => {
             p={8}
             position="relative"
             overflow="hidden"
-            onMouseEnter={() => setHoveredCard('hero')}
-            onMouseLeave={() => setHoveredCard(null)}
             transition="all 0.3s"
             _hover={{
               transform: 'translateY(-4px)',
@@ -88,7 +98,7 @@ const BentoPortfolio = () => {
             
             <VStack align="start" justify="space-between" h="100%" position="relative">
               <Box>
-                <HStack spacing={3} mb={2}>
+                <HStack gap={3} mb={2}>
                   <Box
                     w="80px"
                     h="80px"
@@ -101,7 +111,7 @@ const BentoPortfolio = () => {
                   >
                     👨‍💻
                   </Box>
-                  <VStack align="start" spacing={0}>
+                  <VStack align="start" gap={0}>
                     <Badge colorScheme="purple" fontSize="xs" mb={1}>Disponible</Badge>
                     <Text fontSize="3xl" fontWeight="black" color="white">
                       [Ton Nom]
@@ -116,29 +126,31 @@ const BentoPortfolio = () => {
                 </Text>
               </Box>
               
-              <HStack spacing={3}>
+              <HStack gap={3}>
                 <IconButton
-                  icon={<Github />}
                   borderRadius="full"
                   bg="whiteAlpha.200"
                   color="white"
                   _hover={{ bg: 'whiteAlpha.300' }}
-                />
+                >
+                  <Github />
+                </IconButton>
                 <IconButton
-                  icon={<Linkedin />}
                   borderRadius="full"
                   bg="whiteAlpha.200"
                   color="white"
                   _hover={{ bg: 'whiteAlpha.300' }}
-                />
+                >
+                  <Linkedin />
+                </IconButton>
                 <Button
-                  leftIcon={<Download size={16} />}
                   borderRadius="full"
                   bg="white"
                   color="#667eea"
                   _hover={{ bg: 'whiteAlpha.900' }}
                   size="sm"
                 >
+                  <Download size={16} />
                   Télécharger CV
                 </Button>
               </HStack>
@@ -159,7 +171,7 @@ const BentoPortfolio = () => {
               boxShadow: '2xl'
             }}
           >
-            <VStack align="start" spacing={2}>
+            <VStack align="start" gap={2}>
               <Box bg="green.100" p={2} borderRadius="lg">
                 <Award color="#10b981" size={20} />
               </Box>
@@ -181,7 +193,7 @@ const BentoPortfolio = () => {
               boxShadow: '2xl'
             }}
           >
-            <VStack align="start" spacing={2}>
+            <VStack align="start" gap={2}>
               <Box bg="purple.100" p={2} borderRadius="lg">
                 <Code color="#8b5cf6" size={20} />
               </Box>
@@ -204,19 +216,19 @@ const BentoPortfolio = () => {
               boxShadow: '2xl'
             }}
           >
-            <VStack align="stretch" spacing={4} h="100%">
+            <VStack align="stretch" gap={4} h="100%">
               <HStack justify="space-between">
                 <Text fontSize="xl" fontWeight="bold" color="gray.800">
                   Compétences Principales
                 </Text>
                 <Zap color="#f59e0b" size={24} />
               </HStack>
-              
-              <VStack spacing={4} flex={1}>
+
+              <VStack gap={4} flex={1}>
                 {skills.map((skill, idx) => (
                   <Box key={idx} w="100%">
                     <HStack justify="space-between" mb={2}>
-                      <HStack spacing={2}>
+                      <HStack gap={2}>
                         <Text fontSize="xl">{skill.icon}</Text>
                         <Text fontSize="sm" fontWeight="medium" color="gray.700">
                           {skill.name}
@@ -260,7 +272,7 @@ const BentoPortfolio = () => {
             <Box position="absolute" top={-20} right={-20} fontSize="150px" opacity={0.2}>
               💡
             </Box>
-            <VStack align="start" spacing={2} position="relative">
+            <VStack align="start" gap={2} position="relative">
               <Text fontSize="lg" fontWeight="bold" color="white">
                 À propos
               </Text>
@@ -271,7 +283,7 @@ const BentoPortfolio = () => {
           </GridItem>
 
           {/* Projects Cards */}
-          {projects.map((project, idx) => (
+          {projects.map((project) => (
             <GridItem
               key={project.id}
               colSpan={{ base: 12, lg: 4 }}
@@ -318,14 +330,15 @@ const BentoPortfolio = () => {
                 </Badge>
               </Box>
               
-              <VStack align="start" p={4} spacing={2} h="50%">
+              
+              <VStack align="start" p={4} gap={2} h="50%">
                 <Text fontSize="lg" fontWeight="bold" color="gray.800">
                   {project.title}
                 </Text>
-                <Text fontSize="sm" color="gray.600" noOfLines={2}>
+                <Text fontSize="sm" color="gray.600">
                   {project.description}
                 </Text>
-                <HStack spacing={2} flexWrap="wrap">
+                <HStack gap={2} flexWrap="wrap">
                   {project.tech.slice(0, 3).map(tech => (
                     <Badge key={tech} size="sm" variant="subtle" colorScheme="purple">
                       {tech}
@@ -337,11 +350,12 @@ const BentoPortfolio = () => {
                     ✓ {project.impact}
                   </Text>
                   <IconButton
-                    icon={<ExternalLink size={16} />}
                     size="xs"
                     variant="ghost"
                     colorScheme="purple"
-                  />
+                  >
+                    <ExternalLink size={16} />
+                  </IconButton>
                 </HStack>
               </VStack>
             </GridItem>
@@ -361,7 +375,7 @@ const BentoPortfolio = () => {
               boxShadow: '0 20px 40px rgba(79, 172, 254, 0.4)'
             }}
           >
-            <VStack align="stretch" spacing={4} h="100%">
+            <VStack align="stretch" gap={4} h="100%">
               <HStack>
                 <Mail color="white" size={24} />
                 <Text fontSize="xl" fontWeight="bold" color="white">
@@ -388,11 +402,11 @@ const BentoPortfolio = () => {
               />
               
               <Button
-                leftIcon={<Send size={16} />}
                 bg="white"
                 color="#4facfe"
                 _hover={{ bg: 'whiteAlpha.900' }}
               >
+                <Send size={16} />
                 Envoyer
               </Button>
             </VStack>
@@ -424,7 +438,7 @@ const BentoPortfolio = () => {
             >
               "
             </Box>
-            <VStack align="start" justify="center" h="100%" position="relative" spacing={3}>
+            <VStack align="start" justify="center" h="100%" position="relative" gap={3}>
               <Text fontSize="xl" color="white" fontStyle="italic" lineHeight="tall">
                 Le code est de la poésie. Chaque ligne raconte une histoire.
               </Text>
@@ -443,7 +457,7 @@ const BentoPortfolio = () => {
           <ModalHeader>{selectedProject?.title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <VStack align="stretch" spacing={4}>
+            <VStack align="stretch" gap={4}>
               <Image
                 src={selectedProject?.image}
                 alt={selectedProject?.title}
@@ -453,12 +467,13 @@ const BentoPortfolio = () => {
                 objectFit="cover"
               />
               <Text>{selectedProject?.description}</Text>
-              <HStack spacing={2}>
-                {selectedProject?.tech.map(tech => (
+              <HStack gap={2}>
+                {selectedProject?.tech.map((tech: string) => (
                   <Badge key={tech} colorScheme="purple">{tech}</Badge>
                 ))}
               </HStack>
-              <Button leftIcon={<ExternalLink />} colorScheme="purple">
+              <Button colorScheme="purple">
+                <ExternalLink />
                 Voir le projet
               </Button>
             </VStack>

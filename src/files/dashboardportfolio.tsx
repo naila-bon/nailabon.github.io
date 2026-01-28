@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Box, Container, Text, VStack, HStack, Grid, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, Badge, Progress } from '@chakra-ui/react';
+import { Box, Container, Text, VStack, HStack, Grid, Badge } from '@chakra-ui/react';
+import { Progress } from '@chakra-ui/progress';
 import { TrendingUp, Award, Code, Users, Zap, Target, Calendar, GitBranch } from 'lucide-react';
 
 const DashboardPortfolio = () => {
-  const [activeMetric, setActiveMetric] = useState('all');
 
   const kpis = [
     { 
@@ -84,8 +83,8 @@ const DashboardPortfolio = () => {
     }
   ];
 
-  const getImpactColor = (impact) => {
-    const colors = {
+  const getImpactColor = (impact: string) => {
+    const colors: Record<string, string> = {
       critical: '#ef4444',
       high: '#10b981',
       medium: '#f59e0b',
@@ -100,16 +99,16 @@ const DashboardPortfolio = () => {
       <Box bg="rgba(15, 23, 42, 0.8)" backdropFilter="blur(20px)" borderBottom="1px solid" borderColor="whiteAlpha.100">
         <Container maxW="1400px" py={4}>
           <HStack justify="space-between">
-            <HStack spacing={3}>
+            <HStack gap={3}>
               <Box bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" p={2} borderRadius="lg">
                 <TrendingUp size={24} />
               </Box>
-              <VStack align="start" spacing={0}>
+              <VStack align="start" gap={0}>
                 <Text fontSize="2xl" fontWeight="black">Performance Dashboard</Text>
                 <Text fontSize="sm" color="whiteAlpha.600">Portfolio Analytics • Dernière mise à jour: Aujourd'hui</Text>
               </VStack>
             </HStack>
-            <HStack spacing={2}>
+            <HStack gap={2}>
               <Badge colorScheme="green" fontSize="sm" px={3} py={1}>En ligne</Badge>
               <Badge colorScheme="purple" fontSize="sm" px={3} py={1}>BUT 3</Badge>
             </HStack>
@@ -118,8 +117,8 @@ const DashboardPortfolio = () => {
       </Box>
 
       <Container maxW="1400px" py={8}>
-        <VStack spacing={8} align="stretch">
-          
+        <VStack gap={8} align="stretch">
+
           {/* KPIs Grid */}
           <Grid templateColumns="repeat(4, 1fr)" gap={6}>
             {kpis.map((kpi, idx) => {
@@ -152,13 +151,13 @@ const DashboardPortfolio = () => {
                     pointerEvents="none"
                   />
                   
-                  <VStack align="start" spacing={3} position="relative">
+                  <VStack align="start" gap={3} position="relative">
                     <HStack justify="space-between" w="100%">
                       <Box bg={kpi.color + '20'} p={2} borderRadius="lg">
                         <Icon color={kpi.color} size={20} />
                       </Box>
-                      <Badge 
-                        bg={kpi.trend === 'increase' ? 'green.500' : 'red.500'} 
+                      <Badge
+                        bg={kpi.trend === 'increase' ? 'green.500' : 'red.500'}
                         color="white"
                         fontSize="xs"
                         px={2}
@@ -188,14 +187,14 @@ const DashboardPortfolio = () => {
               borderColor="whiteAlpha.100"
             >
               <HStack justify="space-between" mb={6}>
-                <VStack align="start" spacing={0}>
+                <VStack align="start" gap={0}>
                   <Text fontSize="xl" fontWeight="bold">Niveau de Compétences</Text>
                   <Text fontSize="sm" color="whiteAlpha.600">Progression et expérience acquise</Text>
                 </VStack>
                 <Target color="#667eea" size={24} />
               </HStack>
 
-              <VStack spacing={5} align="stretch">
+              <VStack gap={5} align="stretch">
                 {skills.map((skill, idx) => (
                   <Box 
                     key={idx}
@@ -207,19 +206,19 @@ const DashboardPortfolio = () => {
                   >
                     <HStack justify="space-between" mb={2}>
                       <Text fontWeight="bold">{skill.name}</Text>
-                      <HStack spacing={4} fontSize="sm" color="whiteAlpha.600">
-                        <HStack spacing={1}>
+                      <HStack gap={4} fontSize="sm" color="whiteAlpha.600">
+                        <HStack gap={1}>
                           <Award size={14} />
                           <Text>{skill.projects} projets</Text>
                         </HStack>
-                        <HStack spacing={1}>
+                        <HStack gap={1}>
                           <Calendar size={14} />
                           <Text>{skill.hours}h</Text>
                         </HStack>
                       </HStack>
                     </HStack>
-                    <HStack spacing={3}>
-                      <Progress 
+                    <HStack gap={3}>
+                      <Progress
                         value={skill.level} 
                         flex={1}
                         h="8px"
@@ -247,23 +246,23 @@ const DashboardPortfolio = () => {
               borderColor="whiteAlpha.100"
             >
               <HStack justify="space-between" mb={6}>
-                <VStack align="start" spacing={0}>
+                <VStack align="start" gap={0}>
                   <Text fontSize="xl" fontWeight="bold">Activité Récente</Text>
                   <Text fontSize="sm" color="whiteAlpha.600">Derniers projets livrés</Text>
                 </VStack>
                 <Zap color="#f59e0b" size={24} />
               </HStack>
 
-              <VStack spacing={4} align="stretch">
+              <VStack gap={4} align="stretch">
                 {timeline.slice().reverse().map((period, idx) => (
                   <Box key={idx}>
                     <HStack justify="space-between" mb={3}>
                       <Text fontSize="sm" fontWeight="bold" color="#667eea">{period.quarter}</Text>
                       <Badge colorScheme="purple">{period.completed} complétés</Badge>
                     </HStack>
-                    <VStack spacing={2} align="stretch" pl={4} borderLeft="2px solid" borderColor="whiteAlpha.200">
+                    <VStack gap={2} align="stretch" pl={4} borderLeft="2px solid" borderColor="whiteAlpha.200">
                       {period.projects.map((project, pIdx) => (
-                        <Box 
+                        <Box
                           key={pIdx}
                           p={3}
                           bg="whiteAlpha.50"
@@ -291,9 +290,9 @@ const DashboardPortfolio = () => {
             borderColor="whiteAlpha.100"
           >
             <Text fontSize="xl" fontWeight="bold" mb={6}>Performance Trimestrielle</Text>
-            <HStack spacing={4} align="end" h="200px">
+            <HStack gap={4} align="end" h="200px">
               {timeline.map((period, idx) => (
-                <VStack key={idx} flex={1} h="100%" justify="end" spacing={2}>
+                <VStack key={idx} flex={1} h="100%" justify="end" gap={2}>
                   <Box
                     w="100%"
                     h={`${(period.completed / 10) * 100}%`}

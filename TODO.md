@@ -1,0 +1,4 @@
+- [x] Ajuster l'effet d'empilement pour représenter la tranche du livre en dessous du HTMLFlipBook.
+  - [x] Modifier les Box pour qu'elles soient plus compactes, verticales et moins éparpillées.
+  - [x] Réduire les rotations et échelles pour un effet plus uniforme représentant l'épaisseur du livre.
+  - [x] Tester l'effet visuel ajusté.

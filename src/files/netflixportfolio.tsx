@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Box, Container, Text, VStack, HStack, Image, Badge, Button, IconButton } from '@chakra-ui/react';
-import { Play, ChevronLeft, ChevronRight, Info, Star, Code, ExternalLink } from 'lucide-react';
+import { Box, Container, Text, VStack, HStack, Badge, Button, IconButton } from '@chakra-ui/react';
+import { Play, Info, Star, ExternalLink } from 'lucide-react';
 
 const NetflixPortfolio = () => {
-  const [hoveredProject, setHoveredProject] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
 
   const categories = [
     {
@@ -104,10 +103,10 @@ const NetflixPortfolio = () => {
     }
   ];
 
-  const ScrollContainer = ({ children, title }) => {
-    const scrollRef = useRef(null);
+  const ScrollContainer = ({ children, title }: { children: React.ReactNode; title: string }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
 
-    const scroll = (direction) => {
+    const scroll = (direction: string) => {
       if (scrollRef.current) {
         const scrollAmount = direction === 'left' ? -800 : 800;
         scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
@@ -119,7 +118,6 @@ const NetflixPortfolio = () => {
         <Text fontSize="2xl" fontWeight="bold" mb={4} px={8}>{title}</Text>
         
         <IconButton
-          icon={<ChevronLeft />}
           position="absolute"
           left={0}
           top="50%"
@@ -131,10 +129,11 @@ const NetflixPortfolio = () => {
           opacity={0.6}
           _groupHover={{ opacity: 1 }}
           transition="opacity 0.3s"
-        />
-        
+        >
+          ‹
+        </IconButton>
+
         <IconButton
-          icon={<ChevronRight />}
           position="absolute"
           right={0}
           top="50%"
@@ -146,7 +145,9 @@ const NetflixPortfolio = () => {
           opacity={0.6}
           _groupHover={{ opacity: 1 }}
           transition="opacity 0.3s"
-        />
+        >
+          ›
+        </IconButton>
 
         <Box
           ref={scrollRef}
@@ -160,7 +161,7 @@ const NetflixPortfolio = () => {
           px={8}
           role="group"
         >
-          <HStack spacing={4} pb={4}>
+          <HStack gap={4} pb={4}>
             {children}
           </HStack>
         </Box>
@@ -168,7 +169,7 @@ const NetflixPortfolio = () => {
     );
   };
 
-  const ProjectCard = ({ project, isFeatured = false }) => {
+  const ProjectCard = ({ project, isFeatured = false }: { project: { id: number; title: string; subtitle: string; description: string; tech: string[]; image: string; rating: number; featured: boolean; impact: string }; isFeatured?: boolean }) => {
     const isHovered = hoveredProject === project.id;
 
     return (
@@ -195,7 +196,7 @@ const NetflixPortfolio = () => {
           bottom={0}
           bgImage={`url(${project.image})`}
           bgSize="cover"
-          bgPosition="center"
+          backgroundPosition="center"
           filter={isHovered ? 'brightness(0.4)' : 'brightness(0.7)'}
           transition="filter 0.3s"
         />
@@ -218,11 +219,11 @@ const NetflixPortfolio = () => {
           right={0}
           p={6}
           align="start"
-          spacing={2}
+          gap={2}
         >
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Badge colorScheme="red" fontSize="xs">
-              <HStack spacing={1}>
+              <HStack gap={1}>
                 <Star size={10} fill="currentColor" />
                 <Text>{project.rating}</Text>
               </HStack>
@@ -242,38 +243,42 @@ const NetflixPortfolio = () => {
 
           {/* Visible seulement au hover */}
           {isHovered && (
-            <VStack align="start" spacing={3} w="100%">
-              <Text fontSize="sm" color="whiteAlpha.900" noOfLines={3}>
+            <VStack align="start" gap={3} w="100%">
+              <Text fontSize="sm" color="whiteAlpha.900">
                 {project.description}
               </Text>
-              
+
               <Text fontSize="xs" color="green.400" fontWeight="bold">
                 ✓ {project.impact}
               </Text>
 
-              <HStack spacing={2} w="100%">
+              <HStack gap={2} w="100%">
                 <Button
-                  leftIcon={<Play size={16} />}
                   colorScheme="whiteAlpha"
                   bg="white"
                   color="black"
                   size="sm"
                   _hover={{ bg: 'whiteAlpha.800' }}
                 >
-                  Voir le projet
+                  <HStack gap={2}>
+                    <Play size={16} />
+                    <Text>Voir le projet</Text>
+                  </HStack>
                 </Button>
                 <IconButton
-                  icon={<Info size={16} />}
                   colorScheme="whiteAlpha"
                   variant="outline"
                   size="sm"
-                />
+                >
+                  <Info size={16} />
+                </IconButton>
                 <IconButton
-                  icon={<ExternalLink size={16} />}
                   colorScheme="whiteAlpha"
                   variant="outline"
                   size="sm"
-                />
+                >
+                  <ExternalLink size={16} />
+                </IconButton>
               </HStack>
             </VStack>
           )}
@@ -283,7 +288,7 @@ const NetflixPortfolio = () => {
   };
 
   // Projet hero
-  const heroProject = categories[0].projects.find(p => p.featured);
+  const heroProject = categories[0]?.projects?.find(p => p.featured) || null;
 
   return (
     <Box minH="100vh" bg="#141414" color="white">
@@ -291,9 +296,9 @@ const NetflixPortfolio = () => {
       <Box
         position="relative"
         h="80vh"
-        bgImage={`url(${heroProject.image})`}
+        bgImage={heroProject ? `url(${heroProject.image})` : undefined}
         bgSize="cover"
-        bgPosition="center"
+        backgroundPosition="center"
       >
         {/* Gradient overlays */}
         <Box
@@ -319,23 +324,22 @@ const NetflixPortfolio = () => {
               PROJET PHARE
             </Badge>
             <Text fontSize="6xl" fontWeight="black" lineHeight="1.1">
-              {heroProject.title}
+              {heroProject?.title}
             </Text>
             <Text fontSize="xl" color="whiteAlpha.900" mb={4}>
-              {heroProject.description}
+              {heroProject?.description}
             </Text>
             
-            <HStack spacing={3} mb={6}>
-              {heroProject.tech.map(tech => (
+            <HStack gap={3} mb={6}>
+              {heroProject?.tech?.map(tech => (
                 <Badge key={tech} colorScheme="purple" fontSize="md" px={3} py={1}>
                   {tech}
                 </Badge>
               ))}
             </HStack>
 
-            <HStack spacing={3}>
+            <HStack gap={3}>
               <Button
-                leftIcon={<Play />}
                 size="lg"
                 colorScheme="whiteAlpha"
                 bg="white"
@@ -343,17 +347,22 @@ const NetflixPortfolio = () => {
                 _hover={{ bg: 'whiteAlpha.800' }}
                 px={8}
               >
-                Découvrir
+                <HStack gap={2}>
+                  <Play />
+                  <Text>Découvrir</Text>
+                </HStack>
               </Button>
               <Button
-                leftIcon={<Info />}
                 size="lg"
                 colorScheme="whiteAlpha"
                 variant="outline"
                 _hover={{ bg: 'whiteAlpha.200' }}
                 px={8}
               >
-                Plus d'infos
+                <HStack gap={2}>
+                  <Info />
+                  <Text>Plus d'infos</Text>
+                </HStack>
               </Button>
             </HStack>
           </VStack>
@@ -362,7 +371,7 @@ const NetflixPortfolio = () => {
 
       {/* Categories */}
       <Box py={8}>
-        <VStack spacing={12} align="stretch">
+        <VStack gap={12} align="stretch">
           {categories.map(category => (
             <ScrollContainer key={category.id} title={category.name}>
               {category.projects.map(project => (
@@ -385,11 +394,11 @@ const NetflixPortfolio = () => {
       >
         <Container maxW="1400px">
           <HStack justify="space-between">
-            <HStack spacing={8}>
+            <HStack gap={8}>
               <Text fontSize="2xl" fontWeight="black" color="red.500">
                 PORTFOLIO
               </Text>
-              <HStack spacing={6} fontSize="sm">
+              <HStack gap={6} fontSize="sm">
                 <Text cursor="pointer" _hover={{ color: 'whiteAlpha.700' }}>Accueil</Text>
                 <Text cursor="pointer" _hover={{ color: 'whiteAlpha.700' }}>Projets</Text>
                 <Text cursor="pointer" _hover={{ color: 'whiteAlpha.700' }}>Compétences</Text>
