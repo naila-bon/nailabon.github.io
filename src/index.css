@@ -53,4 +53,26 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Tech carousel animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.tech-carousel {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  animation: scroll 30s linear infinite;
+}
+
+.tech-carousel-container {
+  overflow: hidden;
+  position: relative;
+}
+
 

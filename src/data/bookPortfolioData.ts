@@ -98,6 +98,20 @@ export const pages: PageData[] = [
       { label: 'Mes Compétences', link: 'competences', variant: 'secondary' },
       { label: 'Mes Projets', link: 'projets', variant: 'secondary' },
       { label: 'Me Contacter', link: 'contact', variant: 'primary' }
+    ],
+    technologies: [
+      'java',
+      'python',
+      'arduino',
+      'bash',
+      'docker',
+      'sql',
+      'neo4j',
+      'react',
+      'ts',
+      'angular',
+      'vue.js',
+      'godot'
     ]
   },
   {

@@ -12,6 +12,7 @@ import {
 import { Github, Mail, Linkedin, ExternalLink, Code, Zap, Server, Database, Briefcase, Users, Cpu } from "lucide-react";
 import WashiTape from "./WashiTape";
 import { getSkillKey } from "../data/bookPortfolioData";
+import { TechLogo, techList } from "./TechLogos";
 
 interface PageContentProps {
   data: any;
@@ -176,6 +177,64 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
               ))}
             </SimpleGrid>
           )}
+          
+          {/* Carrousel des technologies - Logo sobre */}
+          <Box w="full" mt={3} overflow="hidden" bg="#f8f8f0" borderRadius="md" py={3}>
+            <Text 
+              fontSize="xs" 
+              fontWeight="bold" 
+              color="#888" 
+              textAlign="center" 
+              mb={2}
+              letterSpacing="wide"
+            >
+              TECHNOLOGIES
+            </Text>
+            <Box
+              overflow="hidden"
+              h="70px"
+              className="tech-carousel-container"
+              css={{
+                '&::-webkit-scrollbar': {
+                  height: '2px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: '#e8e8e0',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: '#bbb',
+                  borderRadius: '2px',
+                },
+              }}
+            >
+              <Box className="tech-carousel">
+                {[...techList, ...techList].map((tech: string, index: number) => (
+                  <Box
+                    key={index}
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    mx={3}
+                    minW="45px"
+                    color="#666"
+                    transition="all 0.2s"
+                    _hover={{ color: "#333" }}
+                    cursor="default"
+                  >
+                    <TechLogo tech={tech} size={22} />
+                    <Text 
+                      fontSize="8px" 
+                      mt={1} 
+                      fontWeight="medium"
+                      textTransform="capitalize"
+                    >
+                      {tech}
+                    </Text>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
         </VStack>
       );
 
