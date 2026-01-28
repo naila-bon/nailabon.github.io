@@ -93,11 +93,10 @@ export const pages: PageData[] = [
     subtitle: 'Développeuse Full-Stack Créative',
     photo: '/photo.jpg',
     content: `Étudiante en 3ème année de BUT Informatique à l'Université Toulouse - Jean Jaurès, je suis actuellement en alternance chez Collins Aerospace à Toulouse.`,
-    cta: [
-      { label: 'Mon Parcours', link: 'parcours', variant: 'secondary' },
-      { label: 'Mes Compétences', link: 'competences', variant: 'secondary' },
-      { label: 'Mes Projets', link: 'projets', variant: 'secondary' },
-      { label: 'Me Contacter', link: 'contact', variant: 'primary' }
+    socials: [
+      { platform: 'GitHub', url: 'https://github.com/naila-bon', icon: 'Github' },
+      { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/naïla-bon-56015b262/', icon: 'Linkedin' },
+      { platform: 'Email', url: 'mailto:naila.ambn@gmail.com', icon: 'Mail' }
     ],
     technologies: [
       'java',

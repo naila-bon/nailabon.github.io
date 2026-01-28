@@ -142,40 +142,31 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
             {data.content}
           </Text>
           
-          {/* Boutons CTA - Grille 2x2 */}
-          {data.cta && (
-            <SimpleGrid columns={2} gap={2} w="full" mt={2} px={2}>
-              {data.cta.map((cta: any, index: number) => (
-                <Button
+          {/* Liens sociaux - GitHub, LinkedIn, Email */}
+          {data.socials && (
+            <HStack gap={4} mt={2}>
+              {data.socials.map((social: any, index: number) => (
+                <Link
                   key={index}
-                  size="xs"
-                  bg={getCtaVariant(cta.variant)}
-                  color="white"
-                  fontSize="10px"
-                  py={1}
-                  px={2}
-                  _hover={{ bg: "#4e342e", transform: "scale(1.02)" }}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  color="#5d4037"
+                  _hover={{ color: "#8d6e63", transform: "scale(1.15)" }}
                   transition="all 0.2s"
-                  onClick={() => {
-                    // Navigation par nom de page
-                    const pageMap: Record<string, number> = {
-                      'accueil': 0,
-                      'parcours': 1,
-                      'competences': 2,
-                      'projets': 4,
-                      'contact': 6
-                    };
-                    const targetPage = pageMap[cta.link.toLowerCase()];
-                    if (targetPage !== undefined) {
-                      const event = new CustomEvent('navigateToPage', { detail: targetPage });
-                      window.dispatchEvent(event);
-                    }
-                  }}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  w="40px"
+                  h="40px"
+                  borderRadius="full"
+                  bg="#f5f0e6"
+                  border="2px solid #e2e2d0"
                 >
-                  {cta.label}
-                </Button>
+                  {getIconComponent(social.icon)}
+                </Link>
               ))}
-            </SimpleGrid>
+            </HStack>
           )}
           
           {/* Carrousel des technologies - Logo sobre */}
