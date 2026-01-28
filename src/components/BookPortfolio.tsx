@@ -162,7 +162,7 @@ const BookPortfolio = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            overflow="visible"
+            overflow="hidden"
             _before={{
               content: '""',
               position: "absolute",
@@ -189,7 +189,7 @@ const BookPortfolio = () => {
             }}
             zIndex={0}
           >
-            {/* Tranche du livre */}
+            {/* Tranche du livre - masquée derrière les pages */}
             <Box
               position="absolute"
               top={0}
@@ -203,7 +203,7 @@ const BookPortfolio = () => {
                 inset 0 4px 6px rgba(255,255,255,0.2),
                 inset 0 -4px 6px rgba(0,0,0,0.3)
               "
-              zIndex={0}
+              zIndex={-1}
             />
 
             <DecorativeCorners color="#b68200" />
@@ -307,7 +307,7 @@ const BookPortfolio = () => {
                 maxWidth={bookWidth}
                 minHeight={bookHeight}
                 maxHeight={bookHeight}
-                maxShadowOpacity={0.5}
+                maxShadowOpacity={0.3}
                 showCover={false}
                 mobileScrollSupport={true}
                 onFlip={onFlip}
@@ -317,7 +317,7 @@ const BookPortfolio = () => {
                 style={{ zIndex: 1 }}
                 startPage={0}
                 drawShadow={true}
-                flippingTime={1000}
+                flippingTime={600}
                 usePortrait={false}
                 startZIndex={0}
                 autoSize={true}
