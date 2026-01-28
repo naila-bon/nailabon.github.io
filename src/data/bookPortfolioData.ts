@@ -219,17 +219,19 @@ export const pages: PageData[] = [
     ]
   },
   {
-    type: 'contact',
+    type: 'contact-left',
     title: 'Restons en contact !',
-    content: 'Actuellement ouverte aux opportunités professionnelles ! N\'hésitez pas à me contacter pour discuter de projets, d\'opportunités de stage ou simplement échanger autour du développement.',
+    content: 'N\'hésitez pas à me contacter pour discuter de projets, d\'opportunités de stage ou simplement échanger autour du développement.'
+  },
+  {
+    type: 'contact-right',
     socials: [
       { platform: 'Email', url: 'mailto:naila.ambn@gmail.com', icon: 'Mail' },
       { platform: 'LinkedIn', url: 'https://www.linkedin.com/in/naïla-bon-56015b262/', icon: 'Linkedin' },
       { platform: 'GitHub', url: 'https://github.com/naila-bon', icon: 'Github' }
     ],
     items: [
-      { date: 'Toulouse, France', title: 'Localisation', desc: 'Disponible en présentiel et remote' },
-      { date: 'En alternance', title: 'Statut', desc: 'Disponible pour nouvelles opportunités' }
+      { date: 'Toulouse, France', title: 'Localisation' },
     ]
   }
 ];

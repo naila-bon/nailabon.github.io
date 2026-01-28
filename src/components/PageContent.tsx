@@ -589,9 +589,9 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
         </VStack>
       );
 
-    case "contact":
+    case "contact-left":
       return (
-        <VStack {...commonStyles} justify="start" gap={3}>
+        <VStack {...commonStyles} align="start" gap={3}>
           <WashiTape color="#ffadad" />
           <Text fontSize="xl" fontWeight="bold" color="#5d4037" borderBottom="2px dashed #5d4037" pb={2}>
             {data.title}
@@ -601,7 +601,79 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
               {data.content}
             </Text>
           )}
-          <VStack gap={2} align="start" w="full" mt={1}>
+          
+          {/* Formulaire de contact */}
+          <VStack gap={3} w="full" mt={2}>
+            <Box w="full">
+              <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                Votre nom
+              </Text>
+              <Box
+                p={2}
+                bg="white"
+                borderRadius="md"
+                border="1px solid #e2e2d0"
+              >
+                <Text fontSize="xs" color="gray.500">
+                  Entrez votre nom
+                </Text>
+              </Box>
+            </Box>
+            
+            <Box w="full">
+              <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                Votre email
+              </Text>
+              <Box
+                p={2}
+                bg="white"
+                borderRadius="md"
+                border="1px solid #e2e2d0"
+              >
+                <Text fontSize="xs" color="gray.500">
+                  entrez@example.com
+                </Text>
+              </Box>
+            </Box>
+            
+            <Box w="full">
+              <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                Message
+              </Text>
+              <Box
+                p={2}
+                bg="white"
+                borderRadius="md"
+                border="1px solid #e2e2d0"
+                minH="80px"
+              >
+                <Text fontSize="xs" color="gray.500">
+                  Écrivez votre message ici...
+                </Text>
+              </Box>
+            </Box>
+            
+            <Button 
+              size="sm" 
+              bg="#5d4037" 
+              color="white" 
+              _hover={{ bg: "#4e342e" }} 
+              w="full"
+              mt={2}
+            >
+              📤 Envoyer
+            </Button>
+          </VStack>
+        </VStack>
+      );
+
+    case "contact-right":
+      return (
+        <VStack {...commonStyles} align="center" justify="center" gap={6}>
+          <WashiTape color="#ffadad" />
+          
+          {/* Liens sociaux centrés */}
+          <VStack gap={4} align="center">
             {data.socials?.map((social: any, index: number) => (
               <Link
                 key={index}
@@ -610,49 +682,34 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
                 rel="noopener noreferrer"
                 display="flex"
                 alignItems="center"
-                gap={2}
+                gap={3}
                 color="#5d4037"
                 fontSize="sm"
-                _hover={{ color: "#8d6e63" }}
+                _hover={{ color: "#8d6e63", transform: "scale(1.05)" }}
+                transition="all 0.2s"
               >
                 {getIconComponent(social.icon)}
                 {social.platform}
               </Link>
             ))}
           </VStack>
+          
+          {/* Informations complémentaires */}
           {data.items && (
-            <VStack align="start" gap={2} w="full" mt={2}>
+            <VStack gap={2} align="center" w="full" mt={4}>
               {data.items.map((item: any, index: number) => (
-                <Box key={index} p={2} bg="white" borderRadius="sm" w="full">
-                  <Text fontSize="xs" fontWeight="bold" color="#5d4037">
-                    {item.date}
-                  </Text>
-                  <Text fontSize="xs" fontWeight="semibold">
+                <Box key={index} textAlign="center">     <Text fontSize="xs" color="#5d4037" fontWeight="semibold">
                     {item.title}
                   </Text>
-                  <Text fontSize="xs" color="gray.600">
-                    {item.desc}
+                  <Text fontSize="xs" fontWeight="bold" color="gray.500">
+                    {item.date}
                   </Text>
+            
                 </Box>
               ))}
             </VStack>
           )}
-          <Link 
-            href="/CV_Bon_Naïla.pdf" 
-            download
-            w="full"
-            mt={2}
-          >
-            <Button 
-              size="sm" 
-              bg="#5d4037" 
-              color="white" 
-              _hover={{ bg: "#4e342e" }} 
-              w="full"
-            >
-              📄 Télécharger mon CV
-            </Button>
-          </Link>
+      
         </VStack>
       );
 

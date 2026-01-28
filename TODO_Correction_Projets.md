@@ -24,4 +24,5 @@ Le bouton "Projets" du menu de navigation ne fonctionne pas correctement car:
 ## Progression
 - [x] Corriger le mapping des pages dans BookNavigation.tsx
 - [x] Tester la navigation vers "Projets"
+- [x] Aligner les projets des deux pages
 
