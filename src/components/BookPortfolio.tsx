@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Container, IconButton } from "@chakra-ui/react";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import HTMLFlipBook from "react-pageflip";
 import BookNavigation from "./BookNavigation";
 import PageContent from "./PageContent";
-import BookPagination from "./BookPagination";
 import { DecorativeCorners } from "./DecorativeCorners";
 import { pages, navigationLabels } from "../data/bookPortfolioData";
 
@@ -139,6 +139,45 @@ const BookPortfolio = () => {
             />
 
             <DecorativeCorners color="#b68200" />
+
+            {/* Left Arrow */}
+            <IconButton
+              aria-label="Previous page"
+              onClick={handleFlipPrev}
+              disabled={currentPage === 0}
+              position="absolute"
+              left="10px"
+              top="50%"
+              transform="translateY(-50%)"
+              zIndex={3}
+              size="lg"
+              variant="ghost"
+              color="white"
+              _hover={{ bg: "rgba(255,255,255,0.1)" }}
+              _disabled={{ opacity: 0.5 }}
+            >
+              <ChevronLeft />
+            </IconButton>
+
+            {/* Right Arrow */}
+            <IconButton
+              aria-label="Next page"
+              onClick={handleFlipNext}
+              disabled={currentPage === pages.length - 1}
+              position="absolute"
+              right="10px"
+              top="50%"
+              transform="translateY(-50%)"
+              zIndex={3}
+              size="lg"
+              variant="ghost"
+              color="white"
+              _hover={{ bg: "rgba(255,255,255,0.1)" }}
+              _disabled={{ opacity: 0.5 }}
+            >
+              <ChevronRight />
+            </IconButton>
+
             {/* Page edges (paper stack) */}
             <Box
               zIndex={2}
@@ -201,12 +240,7 @@ const BookPortfolio = () => {
           </Box>
         </Box>
 
-        <BookPagination
-          currentPage={currentPage}
-          totalPages={pages.length}
-          onPrev={handleFlipPrev}
-          onNext={handleFlipNext}
-        />
+     
       </Container>
     </Box>
   );
