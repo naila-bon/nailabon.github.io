@@ -34,7 +34,9 @@ const BookNavigation = ({ onPageChange, labels, isMobile }: BookNavigationProps)
       left="50%" 
       transform="translateX(-50%)" 
       zIndex={3}
-      mb={isMobile ? 4 : 0}
+      mb={isMobile ? 3 : 0}
+      w={isMobile ? "full" : "auto"}
+      px={isMobile ? 2 : 0}
     >
       {/* Bouton CV épinglé en haut à droite - caché sur mobile */}
       {!isMobile && (
@@ -64,7 +66,11 @@ const BookNavigation = ({ onPageChange, labels, isMobile }: BookNavigationProps)
         </Link>
       )}
 
-      <HStack gap={isMobile ? 1 : 2}>
+      <HStack 
+        gap={isMobile ? 0.5 : 2} 
+        justify="center"
+        flexWrap={isMobile ? "wrap" : "nowrap"}
+      >
         {labels.map((label, idx) => (
           <Box
             key={idx}
@@ -72,21 +78,23 @@ const BookNavigation = ({ onPageChange, labels, isMobile }: BookNavigationProps)
             onClick={() => handlePageClick(idx)}
             bg={pastelColors[idx] || pastelColors[0]}
             p={isMobile ? 1 : 2}
-            minW={isMobile ? "60px" : "120px"}
+            minW={isMobile ? "55px" : "110px"}
             textAlign="center"
-            borderRadius="md md 0 0"
+            borderRadius={isMobile ? "sm" : "md md 0 0"}
             boxShadow="md"
             borderBottom="3px solid #e4e4d0"
             transition="all 0.2s"
             _hover={{
-              transform: "translateY(-2px)",
+              transform: isMobile ? "scale(1.05)" : "translateY(-2px)",
               boxShadow: "lg"
             }}
+            flex={isMobile ? "1" : "none"}
           >
             <Text 
-              fontSize={isMobile ? "10px" : "xs"} 
+              fontSize={isMobile ? "9px" : "xs"} 
               fontWeight="bold" 
               color="#5D4E37"
+              whiteSpace="nowrap"
             >
               {label}
             </Text>

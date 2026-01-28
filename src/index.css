@@ -75,4 +75,45 @@ button:focus-visible {
   position: relative;
 }
 
+/* Book page flip edge-only click zones */
+.book-page-flip {
+  position: relative;
+}
+
+.book-page-flip .page {
+  position: relative;
+}
+
+/* Only show pointer cursor on left and right edges (15% each) */
+.book-page-flip .page:hover {
+  cursor: default;
+}
+
+.book-page-flip .page.flip-left:hover,
+.book-page-flip .page.flip-right:hover {
+  cursor: pointer;
+}
+
+/* Invisible overlay for edge click zones */
+.page-flip-edge-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 15%;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.page-flip-edge-overlay.left {
+  left: 0;
+}
+
+.page-flip-edge-overlay.right {
+  right: 0;
+}
+
+.page-flip-edge-overlay:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 

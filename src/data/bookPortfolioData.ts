@@ -244,7 +244,7 @@ export const pages: PageData[] = [
       { platform: 'GitHub', url: 'https://github.com/naila-bon', icon: 'Github' }
     ],
     items: [
-      { date: 'Toulouse, France', title: 'Localisation' },
+      { date: 'Toulouse, France', title: 'Localisation', desc: '' },
     ]
   }
 ];

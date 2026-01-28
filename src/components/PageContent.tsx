@@ -20,12 +20,66 @@ interface PageContentProps {
   isMobile?: boolean;
 }
 
+// Ref pour suivre les éléments cliqués et éviter les doubles clics
+const clickedElements = new Set<string>();
+
+// Fonction pour générer un ID unique pour chaque élément cliquable
+const getElementId = (skill: string, projectId?: number, index?: number) => {
+  return `skill-${skill}-${projectId || 0}-${index ?? 0}`;
+};
+
+// Gestionnaire de clic optimisé pour les badges de compétences
+const handleSkillClick = (skill: string, e: React.MouseEvent | React.TouchEvent, projectId?: number, index?: number) => {
+  const elementId = getElementId(skill, projectId, index);
+  
+  // Empêcher les doubles clics sur le même élément
+  if (clickedElements.has(elementId)) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+  
+  // Marquer l'élément comme cliqué
+  clickedElements.add(elementId);
+  
+  // Empêcher toute propagation vers le flipbook
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    // Pour les événements React qui ont un nativeEvent
+    if ('nativeEvent' in e) {
+      (e as any).nativeEvent.stopImmediatePropagation();
+    }
+  }
+  
+  const skillKey = getSkillKey(skill);
+  sessionStorage.setItem('highlightSkill', skillKey);
+  
+  // Désactiver pointer-events sur l'élément ciblé pour éviter que le flipbook capte les événements
+  const target = e?.target as HTMLElement;
+  if (target) {
+    target.style.pointerEvents = 'none';
+    
+    // Réactiver après un délai suffisant pour la navigation
+    setTimeout(() => {
+      target.style.pointerEvents = '';
+      clickedElements.delete(elementId);
+    }, 500);
+  }
+  
+  // Navigation avec délai pour laisser le temps aux événements de se propager
+  setTimeout(() => {
+    const event = new CustomEvent('navigateToPage', { detail: 2 });
+    window.dispatchEvent(event);
+  }, 100);
+};
+
 const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
   const pageBg = "#fffdf0";
   const borderColor = "#e2e2d0";
 
   const commonStyles = {
-    p: isMobile ? 3 : 6,
+    p: isMobile ? 2 : 6,
     h: "100%",
     bg: pageBg,
     position: "relative" as const,
@@ -62,14 +116,6 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
     }
   };
 
-  const getCtaVariant = (variant?: string) => {
-    switch (variant) {
-      case 'primary': return '#5d4037';
-      case 'secondary': return '#8d6e63';
-      default: return '#5d4037';
-    }
-  };
-
   switch (data.type) {
     case "accueil":
       return (
@@ -77,13 +123,13 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
           {...commonStyles}
           align="center"
           justify="start"
-          gap={4}
+          gap={isMobile ? 2 : 4}
         >
           {/* Washi Tape décorative pour la photo */}
-          <Box position="absolute" top="60px" zIndex={2}>
+          <Box position="absolute" top={isMobile ? "50px" : "60px"} zIndex={2}>
             <Box
               bg="#ffb6c1"
-              px={4}
+              px={isMobile ? 3 : 4}
               py={1}
               transform="rotate(-3deg)"
               boxShadow="sm"
@@ -92,25 +138,25 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
           
           {/* Photo avec cadre décoratif */}
           <Box
-            border={isMobile ? "4px solid white" : "6px solid white"}
+            border={isMobile ? "3px solid white" : "6px solid white"}
             boxShadow="lg"
             transform="rotate(-2deg)"
-            mt={isMobile ? 2 : 4}
+            mt={isMobile ? 1 : 4}
             position="relative"
           >
             <Image 
               src={data.photo} 
               alt="Naïla Bon" 
-              w={isMobile ? "100px" : "140px"} 
-              h={isMobile ? "125px" : "175px"} 
+              w={isMobile ? "80px" : "140px"} 
+              h={isMobile ? "100px" : "175px"} 
               objectFit="cover" 
             />
           </Box>
           
           {/* Titre et sous-titre */}
-          <VStack gap={1} textAlign="center">
+          <VStack gap={0.5} textAlign="center">
             <Text 
-              fontSize="xl" 
+              fontSize={isMobile ? "md" : "xl"} 
               fontWeight="bold" 
               fontFamily="serif"
               color="#5d4037"
@@ -119,7 +165,7 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
               {data.title}
             </Text>
             <Text 
-              fontSize="sm" 
+              fontSize={isMobile ? "xs" : "sm"} 
               color="#8d6e63"
               fontStyle="italic"
             >
@@ -133,7 +179,7 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
           {/* Contenu de présentation */}
           <Text 
             color="#5d4037" 
-            fontSize="xs" 
+            fontSize={isMobile ? "9px" : "xs"} 
             lineHeight="tall" 
             whiteSpace="pre-line"
             textAlign="center"
@@ -144,7 +190,7 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
           
           {/* Liens sociaux - GitHub, LinkedIn, Email */}
           {data.socials && (
-            <HStack gap={4} mt={2}>
+            <HStack gap={isMobile ? 2 : 4} mt={1}>
               {data.socials.map((social: any, index: number) => (
                 <Link
                   key={index}
@@ -157,8 +203,8 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  w="40px"
-                  h="40px"
+                  w={isMobile ? "32px" : "40px"}
+                  h={isMobile ? "32px" : "40px"}
                   borderRadius="full"
                   bg="#f5f0e6"
                   border="2px solid #e2e2d0"
@@ -170,20 +216,21 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
           )}
           
           {/* Carrousel des technologies - Logo sobre */}
-          <Box w="full" mt={3} overflow="hidden" bg="#f8f8f0" borderRadius="md" py={3}>
+          <Box w="full" mt={2} overflow="hidden" bg="#f8f8f0" borderRadius="md" py={2}>
             <Text 
               fontSize="xs" 
               fontWeight="bold" 
               color="#888" 
               textAlign="center" 
-              mb={2}
+              mb={1}
               letterSpacing="wide"
+              display={isMobile ? "none" : "block"}
             >
               TECHNOLOGIES
             </Text>
             <Box
               overflow="hidden"
-              h="70px"
+              h={isMobile ? "50px" : "70px"}
               className="tech-carousel-container"
               css={{
                 '&::-webkit-scrollbar': {
@@ -205,22 +252,24 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
-                    mx={3}
-                    minW="45px"
+                    mx={isMobile ? 1 : 3}
+                    minW={isMobile ? "35px" : "45px"}
                     color="#666"
                     transition="all 0.2s"
                     _hover={{ color: "#333" }}
                     cursor="default"
                   >
-                    <TechLogo tech={tech} size={22} />
-                    <Text 
-                      fontSize="8px" 
-                      mt={1} 
-                      fontWeight="medium"
-                      textTransform="capitalize"
-                    >
-                      {tech}
-                    </Text>
+                    <TechLogo tech={tech} size={isMobile ? 18 : 22} />
+                    { !isMobile && (
+                      <Text 
+                        fontSize="8px" 
+                        mt={1} 
+                        fontWeight="medium"
+                        textTransform="capitalize"
+                      >
+                        {tech}
+                      </Text>
+                    )}
                   </Box>
                 ))}
               </Box>
@@ -490,40 +539,79 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
                       ))}
                     </HStack>
                   </Box>
-                  
+
                   <Box w="full">
                     <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
                       Compétences
                     </Text>
                     <HStack wrap="wrap" gap={1}>
                       {project.projectSkills.map((skill: string, i: number) => (
-                        <Badge 
-                          key={i} 
-                          colorScheme="blue" 
+                        <Badge
+                          key={i}
+                          colorScheme="blue"
                           fontSize="xs"
                           cursor="pointer"
-                          _hover={{ bg: "blue.500", transform: "scale(1.05)" }}
-                          transition="all 0.2s"
-                          onClick={() => {
-                            const skillKey = getSkillKey(skill);
-                            sessionStorage.setItem('highlightSkill', skillKey);
-                            const event = new CustomEvent('navigateToPage', { detail: 2 });
-                            window.dispatchEvent(event);
+                          userSelect="none"
+                          px={2}
+                          py={1}
+                          borderRadius="md"
+                          bg="blue.50"
+                          color="blue.700"
+                          border="1px solid"
+                          borderColor="blue.200"
+                          _hover={{
+                            bg: "blue.100",
+                            color: "blue.800",
+                            borderColor: "blue.400",
+                            transform: "scale(1.05) translateY(-1px)",
+                            boxShadow: "md",
+                            textDecoration: "underline"
                           }}
+                          _active={{
+                            bg: "blue.600",
+                            color: "white",
+                            transform: "scale(0.95)"
+                          }}
+                          transition="all 0.15s cubic-bezier(0.4, 0, 0.2, 1)"
+                          onClick={(e: React.MouseEvent) => {
+                            handleSkillClick(skill, e, project.id, i);
+                          }}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          onMouseUp={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          onTouchStart={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSkillClick(skill, e, project.id, i);
+                          }}
+                          role="button"
+                          aria-label={`Voir la compétence ${skill}`}
+                          title="Cliquez pour naviguer vers cette compétence"
                         >
-                          {skill}
+                          <HStack gap={0.5}>
+                            <Text fontWeight="medium">{skill}</Text>
+                            <Text fontSize="10px" opacity={0.8}>↗</Text>
+                          </HStack>
                         </Badge>
                       ))}
                     </HStack>
+                    <Text fontSize="9px" color="gray.400" mt={1}>
+                      ↗ Lien hypertexte - Cliquez pour naviguer
+                    </Text>
                   </Box>
-                  
+
                   {project.link && (
                     <Link href={project.link} target="_blank" rel="noopener noreferrer" w="full">
-                      <Button 
-                        size="xs" 
-                        bg="#5d4037" 
-                        color="white" 
-                        _hover={{ bg: "#4e342e" }} 
+                      <Button
+                        size="xs"
+                        bg="#5d4037"
+                        color="white"
+                        _hover={{ bg: "#4e342e" }}
                         w="full"
                       >
                         Voir sur GitHub
@@ -592,40 +680,79 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
                       ))}
                     </HStack>
                   </Box>
-                  
+
                   <Box w="full">
                     <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
                       Compétences
                     </Text>
                     <HStack wrap="wrap" gap={1}>
                       {project.projectSkills.map((skill: string, i: number) => (
-                        <Badge 
-                          key={i} 
-                          colorScheme="blue" 
+                        <Badge
+                          key={i}
+                          colorScheme="blue"
                           fontSize="xs"
                           cursor="pointer"
-                          _hover={{ bg: "blue.500", transform: "scale(1.05)" }}
-                          transition="all 0.2s"
-                          onClick={() => {
-                            const skillKey = getSkillKey(skill);
-                            sessionStorage.setItem('highlightSkill', skillKey);
-                            const event = new CustomEvent('navigateToPage', { detail: 2 });
-                            window.dispatchEvent(event);
+                          userSelect="none"
+                          px={2}
+                          py={1}
+                          borderRadius="md"
+                          bg="blue.50"
+                          color="blue.700"
+                          border="1px solid"
+                          borderColor="blue.200"
+                          _hover={{
+                            bg: "blue.100",
+                            color: "blue.800",
+                            borderColor: "blue.400",
+                            transform: "scale(1.05) translateY(-1px)",
+                            boxShadow: "md",
+                            textDecoration: "underline"
                           }}
+                          _active={{
+                            bg: "blue.600",
+                            color: "white",
+                            transform: "scale(0.95)"
+                          }}
+                          transition="all 0.15s cubic-bezier(0.4, 0, 0.2, 1)"
+                          onClick={(e: React.MouseEvent) => {
+                            handleSkillClick(skill, e, project.id, i);
+                          }}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          onMouseUp={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                          onTouchStart={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSkillClick(skill, e, project.id, i);
+                          }}
+                          role="button"
+                          aria-label={`Voir la compétence ${skill}`}
+                          title="Cliquez pour naviguer vers cette compétence"
                         >
-                          {skill}
+                          <HStack gap={0.5}>
+                            <Text fontWeight="medium">{skill}</Text>
+                            <Text fontSize="10px" opacity={0.8}>↗</Text>
+                          </HStack>
                         </Badge>
                       ))}
                     </HStack>
+                    <Text fontSize="9px" color="gray.400" mt={1}>
+                      ↗ Lien hypertexte - Cliquez pour naviguer
+                    </Text>
                   </Box>
-                  
+
                   {project.link && (
                     <Link href={project.link} target="_blank" rel="noopener noreferrer" w="full">
-                      <Button 
-                        size="xs" 
-                        bg="#5d4037" 
-                        color="white" 
-                        _hover={{ bg: "#4e342e" }} 
+                      <Button
+                        size="xs"
+                        bg="#5d4037"
+                        color="white"
+                        _hover={{ bg: "#4e342e" }}
                         w="full"
                       >
                         Voir sur GitHub
@@ -748,13 +875,13 @@ const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
           {data.items && (
             <VStack gap={2} align="center" w="full" mt={4}>
               {data.items.map((item: any, index: number) => (
-                <Box key={index} textAlign="center">     <Text fontSize="xs" color="#5d4037" fontWeight="semibold">
+                <Box key={index} textAlign="center">
+                  <Text fontSize="xs" color="#5d4037" fontWeight="semibold">
                     {item.title}
                   </Text>
                   <Text fontSize="xs" fontWeight="bold" color="gray.500">
                     {item.date}
                   </Text>
-            
                 </Box>
               ))}
             </VStack>

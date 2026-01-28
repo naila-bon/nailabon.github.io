@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type MouseEvent } from "react";
 import { Box, Container, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import HTMLFlipBook from "react-pageflip";
@@ -7,23 +7,30 @@ import PageContent from "./PageContent";
 import { DecorativeCorners } from "./DecorativeCorners";
 import { pages, navigationLabels } from "../data/bookPortfolioData";
 
+// Constants for edge click zones
+const EDGE_WIDTH_PERCENT = 15;
+
 // Hook personnalisé pour les dimensions responsives du livre
 const useBookDimensions = () => {
-  const isMobile = useBreakpointValue({ base: true, md: false }) ?? false;
-  const isTablet = useBreakpointValue({ base: false, md: true, lg: false }) ?? false;
+  // Trois breakpoints pour plus de précision
+  const isMobile = useBreakpointValue({ base: true, sm: false }) ?? false;
+  const isTablet = useBreakpointValue({ sm: true, md: false }) ?? false;
   
   // Dimensions du livre selon la taille de l'écran
-  const bookWidth = isMobile ? 280 : isTablet ? 420 : 500;
-  const bookHeight = isMobile ? 380 : isTablet ? 520 : 600;
+  // Mobile: ~260px, Tablette: ~380px, Desktop: 500px
+  const bookWidth = isMobile ? 260 : isTablet ? 380 : 500;
+  const bookHeight = isMobile ? 350 : isTablet ? 480 : 600;
   
   // Dimensions du conteneur extérieur
-  const containerWidth = isMobile ? 320 : isTablet ? 460 : 1060;
-  const containerHeight = isMobile ? 420 : isTablet ? 560 : 630;
+  const containerWidth = isMobile ? 300 : isTablet ? 420 : 1060;
+  const containerHeight = isMobile ? 390 : isTablet ? 510 : 630;
   
-  // Épaisseur du livre (effet 3D)
-  const bookThickness = isMobile ? 8 : 12;
+  // Taille des éléments UI (types ChakraUI)
+  type ButtonSize = "sm" | "md" | "lg";
+  const arrowSize: ButtonSize = isMobile ? "sm" : isTablet ? "md" : "lg";
+  const cornerRadius = isMobile ? "md" : isTablet ? "lg" : "2xl";
   
-  return { bookWidth, bookHeight, containerWidth, containerHeight, bookThickness, isMobile, isTablet };
+  return { bookWidth, bookHeight, containerWidth, containerHeight, isMobile, isTablet, arrowSize, cornerRadius };
 };
 
 const BookPortfolio = () => {
@@ -32,7 +39,7 @@ const BookPortfolio = () => {
   const flipBook = useRef<any>(null);
   
   // Dimensions responsives
-  const { bookWidth, bookHeight, containerWidth, containerHeight, bookThickness, isMobile, isTablet } = useBookDimensions();
+  const { bookWidth, bookHeight, containerWidth, containerHeight, isMobile, isTablet, arrowSize, cornerRadius } = useBookDimensions();
 
   const onFlip = (e: any) => {
     setCurrentPage(e.data);
@@ -82,6 +89,22 @@ const BookPortfolio = () => {
     }
   };
 
+  // Handler for edge-only page flipping
+  const handleEdgeClick = (e: MouseEvent<HTMLDivElement>, edge: 'left' | 'right') => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (flipBook.current && flipBook.current.pageFlip()) {
+      const pageFlip = flipBook.current.pageFlip();
+      
+      if (edge === 'left') {
+        pageFlip.flipPrev();
+      } else {
+        pageFlip.flipNext();
+      }
+    }
+  };
+
   return (
     <Box
       minH="100vh"
@@ -126,11 +149,11 @@ const BookPortfolio = () => {
             minHeight={containerHeight}
             maxHeight={containerHeight}
             bg="#5d4037"
-            borderRadius={isMobile ? "lg" : "2xl"}
+            borderRadius={cornerRadius}
             borderTop="2px solid #e4e4d0"
-            borderLeft="2px solid #e4e4d0" 
-            borderBottom="2px solid #1e1105" 
-            borderRight="2px solid #1e1105" 
+            borderLeft="2px solid #e4e4d0"
+            borderBottom="2px solid #1e1105"
+            borderRight="2px solid #1e1105"
             boxShadow="
               inset 4px 4px 8px rgba(255,255,255,0.2),
               inset -4px -4px 8px rgba(0,0,0,0.3)
@@ -162,7 +185,7 @@ const BookPortfolio = () => {
               `,
               backgroundPosition: "0 0, 2px 0",
               backgroundRepeat: "repeat",
-              borderRadius: isMobile ? "lg" : "2xl",
+              borderRadius: cornerRadius,
             }}
             zIndex={0}
           >
@@ -172,7 +195,7 @@ const BookPortfolio = () => {
               top={0}
               bottom={0}
               left="50%"
-              w={isMobile ? "4" : "12"}
+              w={isMobile ? "3" : isTablet ? "6" : "12"}
               transform="translateX(-50%)"
               bg="#3e2a20"
               borderRadius="sm"
@@ -191,11 +214,11 @@ const BookPortfolio = () => {
               onClick={handleFlipPrev}
               disabled={currentPage === 0}
               position="absolute"
-              left={isMobile ? "2px" : "10px"}
+              left={isMobile ? "2px" : isTablet ? "4px" : "10px"}
               top="50%"
               transform="translateY(-50%)"
               zIndex={3}
-              size={isMobile ? "sm" : "lg"}
+              size={arrowSize}
               variant="ghost"
               color="white"
               _hover={{ bg: "rgba(255,255,255,0.1)" }}
@@ -210,11 +233,11 @@ const BookPortfolio = () => {
               onClick={handleFlipNext}
               disabled={currentPage === pages.length - 1}
               position="absolute"
-              right={isMobile ? "2px" : "10px"}
+              right={isMobile ? "2px" : isTablet ? "4px" : "10px"}
               top="50%"
               transform="translateY(-50%)"
               zIndex={3}
-              size={isMobile ? "sm" : "lg"}
+              size={arrowSize}
               variant="ghost"
               color="white"
               _hover={{ bg: "rgba(255,255,255,0.1)" }}
@@ -246,7 +269,36 @@ const BookPortfolio = () => {
                 bgImage:
                   "repeating-linear-gradient(to bottom, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px)",
               }}
+              className="book-page-flip"
             >
+              {/* Left edge click zone */}
+              <Box
+                position="absolute"
+                left={0}
+                top={0}
+                bottom={0}
+                w={`${EDGE_WIDTH_PERCENT}%`}
+                zIndex={10}
+                cursor="pointer"
+                className="page-flip-edge-overlay left"
+                onClick={(e) => handleEdgeClick(e, 'left')}
+                _hover={{ bg: 'rgba(255,255,255,0.05)' }}
+              />
+              
+              {/* Right edge click zone */}
+              <Box
+                position="absolute"
+                right={0}
+                top={0}
+                bottom={0}
+                w={`${EDGE_WIDTH_PERCENT}%`}
+                zIndex={10}
+                cursor="pointer"
+                className="page-flip-edge-overlay right"
+                onClick={(e) => handleEdgeClick(e, 'right')}
+                _hover={{ bg: 'rgba(255,255,255,0.05)' }}
+              />
+
               <HTMLFlipBook
                 width={bookWidth}
                 height={bookHeight}
@@ -269,11 +321,11 @@ const BookPortfolio = () => {
                 usePortrait={false}
                 startZIndex={0}
                 autoSize={true}
-                clickEventForward={true}
-                useMouseEvents={true}
+                clickEventForward={false}
+                useMouseEvents={false}
                 swipeDistance={30}
                 showPageCorners={true}
-                disableFlipByClick={false}
+                disableFlipByClick={true}
               >
                 {pages.map((page, index) => (
                   <div key={index} className="page">

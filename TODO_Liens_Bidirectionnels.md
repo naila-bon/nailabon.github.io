@@ -1,50 +1,50 @@
-# TODO: Liens bidirectionnels Compétences ↔ Projets
+# TODO: Correction des liens bidirectionnels Compétences ↔ Projets
 
 ## Objectif
-Créer des liens navig
+Corriger le bug de page qui suit la souris et améliorer les liens bidirectionnels entre compétences et projets.
 
-ables entre les compétences et les projets associés, dans les deux sens.
+## Tâches à effectuer
 
-## Plan d'implémentation
+### 🔧 Bug Fix - Priorité Haute
+- [ ] 1. Corriger stopPropagation pour HTMLFlipBook dans PageContent.tsx
+- [ ] 2. Ajouter nativeEvent.stopImmediatePropagation()
+- [ ] 3. Empêcher les doubles clics sur les badges
 
-### 1. Modifier `src/data/bookPortfolioData.ts`
-- [x] Ajouter un mapping entre les noms de compétences dans les projets et les compétences définies
-- [x] Créer une constante pour le mapping `skillKeyMapping`
-- [x] Ajouter `skillKey` à chaque compétence dans la page skills
+### 🎨 Améliorations Visuelles
+- [ ] 4. Indicator clair (↗) sur les badges de compétences cliquables
+- [ ] 5. Feedback visuel "lien hypertexte" (couleur, underline au hover)
+- [ ] 6. Animation de transition fluide
 
-### 2. Modifier `src/components/PageContent.tsx`
-- [x] Rendre les badges de compétences cliquables dans la section projets
-- [x] Ajouter la navigation vers la page compétences avec highlight
-- [x] Mettre en évidence la compétence sélectionnée sur la page compétences
-- [x] Effacer le highlight après navigation
+### 🔄 Navigation
+- [ ] 7. Scroll automatique vers la capacité mise en évidence
+- [ ] 8. Nettoyer sessionStorage après navigation
 
-### 3. Tester l'expérience utilisateur
-- [ ] Cliquer sur compétence → naviguer vers projets avec highlight
-- [ ] Cliquer sur compétence dans projet → naviguer vers compétences avec highlight
-- [x] Build validé avec succès
+### ✅ Tests
+- [ ] 9. Tester les clics depuis la page Projets
+- [ ] 10. Tester les clics depuis la page Compétences
+- [ ] 11. Vérifier l'absence de freeze
 
-## Fonctionnalités implémentées
+---
 
-### Compétences → Projets (déjà existant)
-- Chaque compétence a un `highlightProject` qui pointe vers un projet
-- Au clic, navigue vers la page projets et illumine le projet correspondant
+## Notes techniques
 
-### Projets → Compétences (NOUVEAU)
-- Chaque compétence dans les projets est maintenant un badge cliquable
-- Au clic, navigue vers la page compétences et met en évidence la compétence correspondante
-- Utilise le mapping pour faire le lien entre les noms ("Développement") et les clés ("realiser")
+### Problème identifié
+Le composant HTMLFlipBook capture les événements souris de manière spéciale.
+Les clics sur les badges se propagent au flipbook et causent un comportement étrange.
 
-## Mappage des compétences
+### Solution
+```typescript
+// Empêcher toute propagation
+e.preventDefault();
+e.stopPropagation();
+e.nativeEvent.stopImmediatePropagation();
 
-| Nom dans projet | Clé compétence | Compétence affichée |
-|-----------------|----------------|---------------------|
-| Développement | realiser | Réaliser |
-| Logique | realiser | Réaliser |
-| Optimisation | optimiser | Optimiser |
-| Innovation | optimiser | Optimiser |
-| Infrastructure | administrer | Administrer |
-| Données | gerer | Gérer |
-| Pilotage | gerer | Gérer |
-| Travail d'équipe | collaborer | Collaborer |
-| Communication | collaborer | Collaborer |
+// Désactiver pointer-events après clic
+setTimeout(() => {
+  (e.target as HTMLElement).style.pointerEvents = 'none';
+}, 100);
+```
+
+### Fichiers à modifier
+- `src/components/PageContent.tsx` - handler de clic sur les badges
 
