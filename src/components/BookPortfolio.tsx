@@ -26,6 +26,28 @@ const BookPortfolio = () => {
     }
   }, [currentPage, isBookReady]);
 
+  // Gestionnaire pour la navigation depuis les boutons CTA
+  useEffect(() => {
+    const handleNavigate = (e: CustomEvent) => {
+      const targetPage = e.detail;
+      
+      if (flipBook.current && flipBook.current.pageFlip()) {
+        const pageFlip = flipBook.current.pageFlip();
+        
+        // Petit délai pour s'assurer que le livre est prêt
+        setTimeout(() => {
+          pageFlip.turnToPage(targetPage);
+          setCurrentPage(targetPage);
+        }, 100);
+      }
+    };
+
+    window.addEventListener('navigateToPage', handleNavigate as EventListener);
+    return () => {
+      window.removeEventListener('navigateToPage', handleNavigate as EventListener);
+    };
+  }, []);
+
   const handleFlipPrev = () => {
     if (flipBook.current && flipBook.current.pageFlip()) {
       flipBook.current.pageFlip().flipPrev();
