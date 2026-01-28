@@ -35,6 +35,16 @@ export interface PageData {
     url: string;
     icon: string;
   }>;
+  projects?: Array<{
+    id: number;
+    title: string;
+    year?: string;
+    description: string;
+    technologies: string[];
+    projectSkills: string[];
+    link?: string;
+    award?: string;
+  }>;
 }
 
 // Mapping entre les clés de compétences et les noms affichés dans les projets
@@ -82,13 +92,7 @@ export const pages: PageData[] = [
     title: 'Naïla Bon',
     subtitle: 'Développeuse Full-Stack Créative',
     photo: '/photo.jpg',
-    content: `Étudiante en 3ème année de BUT Informatique à l'Université Toulouse - Jean Jaurès, je suis actuellement en alternance chez Collins Aerospace à Toulouse.
-
-Passionnée par l'alliance entre créativité et logique, j'aime créer des applications web qui combinent design intuitif et performance technique.
-
-Quand je ne code pas, je laisse parler ma créativité à travers diverses passions artistiques qui enrichissent ma vision du développement.
-
-✨ Actuellement disponible pour de nouvelles opportunités !`,
+    content: `Étudiante en 3ème année de BUT Informatique à l'Université Toulouse - Jean Jaurès, je suis actuellement en alternance chez Collins Aerospace à Toulouse.`,
     cta: [
       { label: 'Mon Parcours', link: 'parcours', variant: 'secondary' },
       { label: 'Mes Compétences', link: 'competences', variant: 'secondary' },
@@ -121,7 +125,7 @@ Quand je ne code pas, je laisse parler ma créativité à travers diverses passi
     ]
   },
   {
-    type: 'skills',
+    type: 'skills-left',
     title: 'Mes Compétences',
     skills: [
       { 
@@ -144,7 +148,13 @@ Quand je ne code pas, je laisse parler ma créativité à travers diverses passi
         skillDescription: 'Infrastructure & Systèmes',
         highlightProject: 3,
         skillKey: 'administrer'
-      },
+      }
+    ]
+  },
+  {
+    type: 'skills-right',
+    title: 'Mes Compétences',
+    skills: [
       { 
         name: 'Gérer', 
         icon: 'Database',
@@ -169,34 +179,44 @@ Quand je ne code pas, je laisse parler ma créativité à travers diverses passi
     ]
   },
   {
-    type: 'projects',
-    title: 'Bomberman Game',
-    year: '2025',
-    description: 'Jeu Bomberman développé en équipe avec gestion complète de la logique de gameplay : déplacements, bombes, collisions, power-ups et interface graphique.',
-    technologies: ['Godot', 'GDScript', 'Algorithmes', 'Gestion d\'événements'],
-    projectSkills: ['Développement', 'Logique', 'Travail d\'équipe'],
-    link: 'https://github.com/Romy514/bomberman',
-    projectId: 3
+    type: 'projects-grid-left',
+    title: 'Mes Projets',
+    projects: [
+      {
+        id: 3,
+        title: 'Bomberman Game',
+        year: '2025',
+        description: 'Jeu Bomberman développé en équipe avec gestion complète de la logique de gameplay.',
+        technologies: ['Godot', 'GDScript'],
+        projectSkills: ['Développement', 'Logique', 'Travail d\'équipe'],
+        link: 'https://github.com/Romy514/bomberman'
+      },
+      {
+        id: 4,
+        title: 'Dashboard IoT',
+        year: '2024',
+        description: 'Application web pour visualiser en temps réel les données de capteurs du bâtiment.',
+        technologies: ['React', 'Python', 'InfluxDB'],
+        projectSkills: ['Développement', 'Données', 'Optimisation'],
+        link: 'https://github.com/IUT-Blagnac/SAE-ALT-S3-Dev-24-25-DB-Recherche-Equipe-3A02'
+      }
+    ]
   },
   {
-    type: 'projects',
-    title: 'Dashboard IoT - Bâtiment de Recherche',
-    year: '2024',
-    description: 'Application web pour visualiser en temps réel les données de capteurs (température, humidité, état des portes) du bâtiment de recherche de l\'IUT. Carte interactive et graphiques d\'historique.',
-    technologies: ['React', 'Python', 'InfluxDB', 'API REST'],
-    projectSkills: ['Développement', 'Données', 'Optimisation', 'Infrastructure'],
-    link: 'https://github.com/IUT-Blagnac/SAE-ALT-S3-Dev-24-25-DB-Recherche-Equipe-3A02',
-    projectId: 4
-  },
-  {
-    type: 'projects',
-    title: 'Station de Recharge Vélos Électriques',
-    year: '2023',
-    description: 'Prototype récompensé aux Olympiades nationales de Sciences de l\'Ingénieur. Tracker solaire automatique avec capteurs pour optimiser la capture d\'énergie et éclairage LED automatique.',
-    technologies: ['Arduino', 'C/C++', 'Capteurs', 'Moteurs pas-à-pas'],
-    projectSkills: ['Optimisation', 'Innovation'],
-    award: '🏆 Prix de l\'hybridation - Olympiades 2023',
-    projectId: 5
+    type: 'projects-grid-right',
+    title: 'Mes Projets',
+    projects: [
+      {
+        id: 5,
+        title: 'Station Recharge Vélos',
+        year: '2023',
+        description: 'Prototype récompensé aux Olympiades nationales de Sciences de l\'Ingénieur.',
+        technologies: ['Arduino', 'C/C++'],
+        projectSkills: ['Optimisation', 'Innovation'],
+        award: '🏆 Prix hybridation - Olympiades 2023',
+        link: undefined
+      }
+    ]
   },
   {
     type: 'contact',

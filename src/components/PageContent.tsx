@@ -16,14 +16,15 @@ import { getSkillKey } from "../data/bookPortfolioData";
 interface PageContentProps {
   data: any;
   isLeft: boolean;
+  isMobile?: boolean;
 }
 
-const PageContent = ({ data, isLeft }: PageContentProps) => {
+const PageContent = ({ data, isLeft, isMobile }: PageContentProps) => {
   const pageBg = "#fffdf0";
   const borderColor = "#e2e2d0";
 
   const commonStyles = {
-    p: 6,
+    p: isMobile ? 3 : 6,
     h: "100%",
     bg: pageBg,
     position: "relative" as const,
@@ -90,17 +91,17 @@ const PageContent = ({ data, isLeft }: PageContentProps) => {
           
           {/* Photo avec cadre décoratif */}
           <Box
-            border="6px solid white"
+            border={isMobile ? "4px solid white" : "6px solid white"}
             boxShadow="lg"
             transform="rotate(-2deg)"
-            mt={4}
+            mt={isMobile ? 2 : 4}
             position="relative"
           >
             <Image 
               src={data.photo} 
               alt="Naïla Bon" 
-              w="140px" 
-              h="175px" 
+              w={isMobile ? "100px" : "140px"} 
+              h={isMobile ? "125px" : "175px"} 
               objectFit="cover" 
             />
           </Box>
@@ -160,8 +161,8 @@ const PageContent = ({ data, isLeft }: PageContentProps) => {
                       'accueil': 0,
                       'parcours': 1,
                       'competences': 2,
-                      'projets': 3,
-                      'contact': 4
+                      'projets': 4,
+                      'contact': 6
                     };
                     const targetPage = pageMap[cta.link.toLowerCase()];
                     if (targetPage !== undefined) {
@@ -257,19 +258,21 @@ const PageContent = ({ data, isLeft }: PageContentProps) => {
         </VStack>
       );
 
-    case "skills":
+    case "skills-left":
       // Vérifier si une compétence doit être mise en évidence
-      const highlightSkillKey = typeof window !== 'undefined' ? sessionStorage.getItem('highlightSkill') : null;
+      const highlightSkillKeyLeft = typeof window !== 'undefined' ? sessionStorage.getItem('highlightSkill') : null;
       
       return (
         <VStack {...commonStyles} align="start" gap={2}>
           <WashiTape color="#caffbf" />
-          <Text fontSize="xl" fontWeight="bold" color="#5d4037" borderBottom="2px dashed #5d4037" pb={2}>
-            {data.title}
-          </Text>
-          <SimpleGrid columns={2} gap={2} w="full" mt={1}>
+          <HStack justify="space-between" w="full">
+            <Text fontSize="xl" fontWeight="bold" color="#5d4037" borderBottom="2px dashed #5d4037" pb={2}>
+              {data.title}
+            </Text>
+          </HStack>
+          <SimpleGrid columns={1} gap={2} w="full" mt={1}>
             {data.skills?.map((skill: any, index: number) => {
-              const isHighlighted = skill.skillKey === highlightSkillKey;
+              const isHighlighted = skill.skillKey === highlightSkillKeyLeft;
               
               return (
                 <Box
@@ -283,14 +286,10 @@ const PageContent = ({ data, isLeft }: PageContentProps) => {
                   transition="all 0.2s"
                   _hover={{ transform: "scale(1.03)", boxShadow: "md", cursor: "pointer" }}
                   onClick={() => {
-                    // Navigation vers la page projets avec highlight
                     if (skill.highlightProject !== undefined) {
-                      // Stocker le projet à illuminer
                       sessionStorage.setItem('highlightProject', skill.highlightProject.toString());
-                      // Effacer le highlight de compétence
                       sessionStorage.removeItem('highlightSkill');
-                      // Naviguer vers la page projets
-                      const event = new CustomEvent('navigateToPage', { detail: 3 });
+                      const event = new CustomEvent('navigateToPage', { detail: 4 });
                       window.dispatchEvent(event);
                     }
                   }}
@@ -316,110 +315,277 @@ const PageContent = ({ data, isLeft }: PageContentProps) => {
             })}
           </SimpleGrid>
           <Text fontSize="xs" color="gray.500" textAlign="center" w="full" mt={2}>
-            {highlightSkillKey ? 'Cliquez pour voir le projet associé' : 'Cliquez sur une compétence pour voir le projet associé'}
+            {highlightSkillKeyLeft ? 'Cliquez pour voir le projet associé' : 'Cliquez sur une compétence pour voir le projet associé'}
           </Text>
         </VStack>
       );
 
-    case "projects":
-      // Vérifier si ce projet doit être illuminé
-      const shouldHighlight = typeof window !== 'undefined' && 
-        sessionStorage.getItem('highlightProject') === data.projectId?.toString();
-      
+    case "skills-right":
+      // Vérifier si une compétence doit être mise en évidence
+      const highlightSkillKeyRight = typeof window !== 'undefined' ? sessionStorage.getItem('highlightSkill') : null;
+
       return (
-        <VStack {...commonStyles} align="start" gap={3}>
-          <WashiTape color="#fdffb6" />
-          <HStack justify="space-between" w="full" wrap="wrap">
-            <Text fontSize="xl" fontWeight="bold" color="#5d4037" borderBottom="2px dashed #5d4037" pb={2}>
-              {data.title}
-            </Text>
-            {data.year && (
-              <Text fontSize="sm" color="gray.500" fontWeight="bold">
-                {data.year}
-              </Text>
-            )}
+        <VStack {...commonStyles} align="start" gap={2} pt={12}>
+          <HStack justify="space-between" w="full">
+        
+            <Box />
           </HStack>
-          
-          {data.award && (
-            <Badge colorScheme="yellow" fontSize="sm" p={2} borderRadius="md">
-              {data.award}
-            </Badge>
-          )}
-          
-          <Text fontSize="sm" color="gray.700" lineHeight="tall" whiteSpace="pre-line">
-            {data.description}
-          </Text>
-          
-          <Box w="full">
-            <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
-              Technologies
-            </Text>
-            <HStack wrap="wrap" gap={1}>
-              {data.technologies?.map((tech: string, i: number) => (
-                <Badge key={i} colorScheme="orange" fontSize="xs">
-                  {tech}
-                </Badge>
-              ))}
-            </HStack>
+          <Box position="absolute" top="80px" left="50%" transform="translateX(-50%)">
+            <WashiTape color="#caffbf" />
           </Box>
-          
-          <Box w="full">
-            <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
-              Compétences mobilisées
-            </Text>
-            <HStack wrap="wrap" gap={1}>
-              {data.projectSkills?.map((skill: string, i: number) => (
-                <Badge 
-                  key={i} 
-                  colorScheme="blue" 
-                  fontSize="xs"
-                  cursor="pointer"
-                  _hover={{ bg: "blue.500", transform: "scale(1.05)" }}
+          <SimpleGrid columns={1} gap={2} w="full" mt={4}>
+            {data.skills?.map((skill: any, index: number) => {
+              const isHighlighted = skill.skillKey === highlightSkillKeyRight;
+              
+              return (
+                <Box
+                  key={index}
+                  p={3}
+                  bg={isHighlighted ? "#e6fffa" : "white"}
+                  borderRadius="md"
+                  boxShadow={isHighlighted ? "lg" : "sm"}
+                  borderTop="4px solid"
+                  borderColor={isHighlighted ? "#38b2ac" : skillColors[(index + 3) % skillColors.length]}
                   transition="all 0.2s"
+                  _hover={{ transform: "scale(1.03)", boxShadow: "md", cursor: "pointer" }}
                   onClick={() => {
-                    // Navigation vers la page compétences avec highlight
-                    const skillKey = getSkillKey(skill);
-                    sessionStorage.setItem('highlightSkill', skillKey);
-                    const event = new CustomEvent('navigateToPage', { detail: 2 });
-                    window.dispatchEvent(event);
+                    if (skill.highlightProject !== undefined) {
+                      sessionStorage.setItem('highlightProject', skill.highlightProject.toString());
+                      sessionStorage.removeItem('highlightSkill');
+                      const event = new CustomEvent('navigateToPage', { detail: 4 });
+                      window.dispatchEvent(event);
+                    }
                   }}
                 >
-                  {skill}
-                </Badge>
-              ))}
-            </HStack>
-          </Box>
+                  <VStack gap={2}>
+                    {getSkillIcon(skill.icon)}
+                    <Text fontSize="xs" fontWeight="bold" color={isHighlighted ? "#319795" : "#5d4037"} textAlign="center">
+                      {skill.name}
+                    </Text>
+                    {skill.skillDescription && (
+                      <Text fontSize="9px" color={isHighlighted ? "#319795" : "gray.600"} textAlign="center" lineHeight="short">
+                        {skill.skillDescription}
+                      </Text>
+                    )}
+                    {isHighlighted && (
+                      <Badge colorScheme="teal" fontSize="xs">
+                        ✨ Projet associé
+                      </Badge>
+                    )}
+                  </VStack>
+                </Box>
+              );
+            })}
+          </SimpleGrid>
+          <Text fontSize="xs" color="gray.500" textAlign="center" w="full" mt={2}>
+            {highlightSkillKeyRight ? 'Cliquez pour voir le projet associé' : 'Cliquez sur une compétence pour voir le projet associé'}
+          </Text>
+        </VStack>
+      );
+
+    case "projects-grid-left":
+      return (
+        <VStack {...commonStyles} align="start" gap={3}>
+          <HStack justify="space-between" w="full">
+            <Text fontSize="xl" fontWeight="bold" color="#5d4037" borderBottom="2px dashed #5d4037" pb={2}>
+              Mes Projets
+            </Text>
+          </HStack>
           
-          {data.link && (
-            <Link href={data.link} target="_blank" rel="noopener noreferrer" w="full">
-              <Button 
-                size="sm" 
-                bg="#5d4037" 
-                color="white" 
-                _hover={{ bg: "#4e342e" }} 
-                w="full"
+          {/* Grille de cartes projets - Page gauche */}
+          <SimpleGrid columns={1} gap={3} w="full">
+            {data.projects?.map((project: any, index: number) => (
+              <Box
+                key={project.id}
+                p={3}
+                bg="white"
+                borderRadius="md"
+                boxShadow="sm"
+                borderTop="3px solid"
+                borderColor={["#667eea", "#f093fb"][index % 2]}
+                transition="all 0.2s"
+                _hover={{ transform: "translateY(-2px)", boxShadow: "md" }}
               >
-                Voir le projet sur GitHub
-              </Button>
-            </Link>
-          )}
+                <VStack align="start" gap={2}>
+                  <HStack justify="space-between" w="full" wrap="wrap">
+                    <Text fontSize="sm" fontWeight="bold" color="#5d4037">
+                      {project.title}
+                    </Text>
+                    {project.year && (
+                      <Badge colorScheme="gray" fontSize="xs">
+                        {project.year}
+                      </Badge>
+                    )}
+                  </HStack>
+                  
+                  {project.award && (
+                    <Badge colorScheme="yellow" fontSize="xs">
+                      {project.award}
+                    </Badge>
+                  )}
+                  
+                  <Text fontSize="xs" color="gray.600" lineHeight="short">
+                    {project.description}
+                  </Text>
+                  
+                  <Box w="full">
+                    <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                      Technologies
+                    </Text>
+                    <HStack wrap="wrap" gap={1}>
+                      {project.technologies.map((tech: string, i: number) => (
+                        <Badge key={i} colorScheme="orange" fontSize="xs">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </HStack>
+                  </Box>
+                  
+                  <Box w="full">
+                    <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                      Compétences
+                    </Text>
+                    <HStack wrap="wrap" gap={1}>
+                      {project.projectSkills.map((skill: string, i: number) => (
+                        <Badge 
+                          key={i} 
+                          colorScheme="blue" 
+                          fontSize="xs"
+                          cursor="pointer"
+                          _hover={{ bg: "blue.500", transform: "scale(1.05)" }}
+                          transition="all 0.2s"
+                          onClick={() => {
+                            const skillKey = getSkillKey(skill);
+                            sessionStorage.setItem('highlightSkill', skillKey);
+                            const event = new CustomEvent('navigateToPage', { detail: 2 });
+                            window.dispatchEvent(event);
+                          }}
+                        >
+                          {skill}
+                        </Badge>
+                      ))}
+                    </HStack>
+                  </Box>
+                  
+                  {project.link && (
+                    <Link href={project.link} target="_blank" rel="noopener noreferrer" w="full">
+                      <Button 
+                        size="xs" 
+                        bg="#5d4037" 
+                        color="white" 
+                        _hover={{ bg: "#4e342e" }} 
+                        w="full"
+                      >
+                        Voir sur GitHub
+                      </Button>
+                    </Link>
+                  )}
+                </VStack>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </VStack>
+      );
+
+    case "projects-grid-right":
+      return (
+        <VStack {...commonStyles} align="start" gap={3}>
+          <HStack justify="space-between" w="full">
+            <Box />
+          </HStack>
           
-          {/* Indicateur de highlight */}
-          {shouldHighlight && (
-            <Box 
-              w="full" 
-              p={2} 
-              bg="#e6fffa" 
-              borderRadius="md" 
-              border="2px solid"
-              borderColor="teal.300"
-              textAlign="center"
-            >
-              <Text fontSize="xs" color="teal.600" fontWeight="bold">
-                ✨ Projet mis en évidence depuis les compétences
-              </Text>
-            </Box>
-          )}
+          {/* Grille de cartes projets - Page droite */}
+          <SimpleGrid columns={1} gap={3} w="full" mt={10}>
+            {data.projects?.map((project: any, index: number) => (
+              <Box
+                key={project.id}
+                p={3}
+                bg="white"
+                borderRadius="md"
+                boxShadow="sm"
+                borderTop="3px solid"
+                borderColor={["#43e97b", "#a0c4ff"][index % 2]}
+                transition="all 0.2s"
+                _hover={{ transform: "translateY(-2px)", boxShadow: "md" }}
+              >
+                <VStack align="start" gap={2}>
+                  <HStack justify="space-between" w="full" wrap="wrap">
+                    <Text fontSize="sm" fontWeight="bold" color="#5d4037">
+                      {project.title}
+                    </Text>
+                    {project.year && (
+                      <Badge colorScheme="gray" fontSize="xs">
+                        {project.year}
+                      </Badge>
+                    )}
+                  </HStack>
+                  
+                  {project.award && (
+                    <Badge colorScheme="yellow" fontSize="xs">
+                      {project.award}
+                    </Badge>
+                  )}
+                  
+                  <Text fontSize="xs" color="gray.600" lineHeight="short">
+                    {project.description}
+                  </Text>
+                  
+                  <Box w="full">
+                    <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                      Technologies
+                    </Text>
+                    <HStack wrap="wrap" gap={1}>
+                      {project.technologies.map((tech: string, i: number) => (
+                        <Badge key={i} colorScheme="orange" fontSize="xs">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </HStack>
+                  </Box>
+                  
+                  <Box w="full">
+                    <Text fontSize="xs" fontWeight="bold" color="#5d4037" mb={1}>
+                      Compétences
+                    </Text>
+                    <HStack wrap="wrap" gap={1}>
+                      {project.projectSkills.map((skill: string, i: number) => (
+                        <Badge 
+                          key={i} 
+                          colorScheme="blue" 
+                          fontSize="xs"
+                          cursor="pointer"
+                          _hover={{ bg: "blue.500", transform: "scale(1.05)" }}
+                          transition="all 0.2s"
+                          onClick={() => {
+                            const skillKey = getSkillKey(skill);
+                            sessionStorage.setItem('highlightSkill', skillKey);
+                            const event = new CustomEvent('navigateToPage', { detail: 2 });
+                            window.dispatchEvent(event);
+                          }}
+                        >
+                          {skill}
+                        </Badge>
+                      ))}
+                    </HStack>
+                  </Box>
+                  
+                  {project.link && (
+                    <Link href={project.link} target="_blank" rel="noopener noreferrer" w="full">
+                      <Button 
+                        size="xs" 
+                        bg="#5d4037" 
+                        color="white" 
+                        _hover={{ bg: "#4e342e" }} 
+                        w="full"
+                      >
+                        Voir sur GitHub
+                      </Button>
+                    </Link>
+                  )}
+                </VStack>
+              </Box>
+            ))}
+          </SimpleGrid>
         </VStack>
       );
 

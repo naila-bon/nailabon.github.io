@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Box, Container, IconButton } from "@chakra-ui/react";
+import { Box, Container, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import HTMLFlipBook from "react-pageflip";
 import BookNavigation from "./BookNavigation";
@@ -7,10 +7,32 @@ import PageContent from "./PageContent";
 import { DecorativeCorners } from "./DecorativeCorners";
 import { pages, navigationLabels } from "../data/bookPortfolioData";
 
+// Hook personnalisé pour les dimensions responsives du livre
+const useBookDimensions = () => {
+  const isMobile = useBreakpointValue({ base: true, md: false }) ?? false;
+  const isTablet = useBreakpointValue({ base: false, md: true, lg: false }) ?? false;
+  
+  // Dimensions du livre selon la taille de l'écran
+  const bookWidth = isMobile ? 280 : isTablet ? 420 : 500;
+  const bookHeight = isMobile ? 380 : isTablet ? 520 : 600;
+  
+  // Dimensions du conteneur extérieur
+  const containerWidth = isMobile ? 320 : isTablet ? 460 : 1060;
+  const containerHeight = isMobile ? 420 : isTablet ? 560 : 630;
+  
+  // Épaisseur du livre (effet 3D)
+  const bookThickness = isMobile ? 8 : 12;
+  
+  return { bookWidth, bookHeight, containerWidth, containerHeight, bookThickness, isMobile, isTablet };
+};
+
 const BookPortfolio = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isBookReady, setIsBookReady] = useState(false);
   const flipBook = useRef<any>(null);
+  
+  // Dimensions responsives
+  const { bookWidth, bookHeight, containerWidth, containerHeight, bookThickness, isMobile, isTablet } = useBookDimensions();
 
   const onFlip = (e: any) => {
     setCurrentPage(e.data);
@@ -61,56 +83,58 @@ const BookPortfolio = () => {
   };
 
   return (
-<Box
-  minH="100vh"
-  bg="#181512"
-  py={12}
-  fontFamily="'Comic Sans MS', cursive, sans-serif"
-  position="relative"
-  _before={{
-    content: '""',
-    position: "absolute",
-    inset: 0,
-    bgImage: `
-      radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 2px),
-      radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 3px),
-      radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 3px)
-    `,
-    backgroundSize: "20px 20px, 30px 30px, 25px 25px",
-    backgroundRepeat: "repeat",
-    filter: "blur(1px)",
-    zIndex: 0,
-    
-  }}
->
-      <Container maxW="1100px">
+    <Box
+      minH="100vh"
+      bg="#181512"
+      py={isMobile ? 4 : 12}
+      fontFamily="'Comic Sans MS', cursive, sans-serif"
+      position="relative"
+      _before={{
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        bgImage: `
+          radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 2px),
+          radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 3px),
+          radial-gradient(circle, rgba(0,0,0,0.02) 1px, transparent 3px)
+        `,
+        backgroundSize: "20px 20px, 30px 30px, 25px 25px",
+        backgroundRepeat: "repeat",
+        filter: "blur(1px)",
+        zIndex: 0,
+      }}
+    >
+      <Container maxW={isMobile ? "100%" : "1100px"} px={isMobile ? 2 : 4}>
         <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
           position="relative"
         >
+          {/* Navigation avec prop isMobile pour adapter l'affichage */}
           <BookNavigation
             currentPage={currentPage}
             onPageChange={setCurrentPage}
             labels={navigationLabels}
+            isMobile={isMobile}
           />
+          
           {/* Simulated overhanging cover background */}
           <Box
-            minWidth={1060}
-            maxWidth={1060}
-            minHeight={630}
-            maxHeight={630}
+            minWidth={containerWidth}
+            maxWidth={containerWidth}
+            minHeight={containerHeight}
+            maxHeight={containerHeight}
             bg="#5d4037"
-            borderRadius="2xl"
+            borderRadius={isMobile ? "lg" : "2xl"}
             borderTop="2px solid #e4e4d0"
             borderLeft="2px solid #e4e4d0" 
             borderBottom="2px solid #1e1105" 
             borderRight="2px solid #1e1105" 
             boxShadow="
-  inset 4px 4px 8px rgba(255,255,255,0.2),   // lumière en haut/gauche
-  inset -4px -4px 8px rgba(0,0,0,0.3)        // ombre en bas/droite
-"
+              inset 4px 4px 8px rgba(255,255,255,0.2),
+              inset -4px -4px 8px rgba(0,0,0,0.3)
+            "
             position="relative"
             display="flex"
             justifyContent="center"
@@ -121,42 +145,41 @@ const BookPortfolio = () => {
               position: "absolute",
               inset: 0,
               bgImage: `
-      repeating-linear-gradient(
-        to right,
-        rgba(0,0,0,0.05) 0px,
-        rgba(0,0,0,0.05) 1px,
-        transparent 1px,
-        transparent 3px
-      ),
-      repeating-linear-gradient(
-        to right,
-        rgba(0,0,0,0.03) 0px,
-        rgba(0,0,0,0.03) 2px,
-        transparent 2px,
-        transparent 5px
-      )
-    `,
-              backgroundPosition: "0 0, 2px 0", // décalage pour irrégularité
+                repeating-linear-gradient(
+                  to right,
+                  rgba(0,0,0,0.05) 0px,
+                  rgba(0,0,0,0.05) 1px,
+                  transparent 1px,
+                  transparent 3px
+                ),
+                repeating-linear-gradient(
+                  to right,
+                  rgba(0,0,0,0.03) 0px,
+                  rgba(0,0,0,0.03) 2px,
+                  transparent 2px,
+                  transparent 5px
+                )
+              `,
+              backgroundPosition: "0 0, 2px 0",
               backgroundRepeat: "repeat",
-              borderRadius: "2xl",
+              borderRadius: isMobile ? "lg" : "2xl",
             }}
             zIndex={0}
           >
-            {/* Tranche */}
-
+            {/* Tranche du livre */}
             <Box
               position="absolute"
               top={0}
               bottom={0}
               left="50%"
-              w="12"
+              w={isMobile ? "4" : "12"}
               transform="translateX(-50%)"
               bg="#3e2a20"
               borderRadius="sm"
               boxShadow="
-  inset 0 4px 6px rgba(255,255,255,0.2),   // lumière en haut
-  inset 0 -4px 6px rgba(0,0,0,0.3)         // ombre en bas
-  "
+                inset 0 4px 6px rgba(255,255,255,0.2),
+                inset 0 -4px 6px rgba(0,0,0,0.3)
+              "
               zIndex={0}
             />
 
@@ -168,11 +191,11 @@ const BookPortfolio = () => {
               onClick={handleFlipPrev}
               disabled={currentPage === 0}
               position="absolute"
-              left="10px"
+              left={isMobile ? "2px" : "10px"}
               top="50%"
               transform="translateY(-50%)"
               zIndex={3}
-              size="lg"
+              size={isMobile ? "sm" : "lg"}
               variant="ghost"
               color="white"
               _hover={{ bg: "rgba(255,255,255,0.1)" }}
@@ -187,11 +210,11 @@ const BookPortfolio = () => {
               onClick={handleFlipNext}
               disabled={currentPage === pages.length - 1}
               position="absolute"
-              right="10px"
+              right={isMobile ? "2px" : "10px"}
               top="50%"
               transform="translateY(-50%)"
               zIndex={3}
-              size="lg"
+              size={isMobile ? "sm" : "lg"}
               variant="ghost"
               color="white"
               _hover={{ bg: "rgba(255,255,255,0.1)" }}
@@ -203,10 +226,10 @@ const BookPortfolio = () => {
             {/* Page edges (paper stack) */}
             <Box
               zIndex={2}
-              minWidth={1020}
-              maxWidth={1050}
-              minHeight={595}
-              maxHeight={595}
+              minWidth={isMobile ? bookWidth + 20 : containerWidth - 40}
+              maxWidth={isMobile ? bookWidth + 20 : containerWidth - 40}
+              minHeight={isMobile ? bookHeight - 10 : containerHeight - 35}
+              maxHeight={isMobile ? bookHeight - 10 : containerHeight - 35}
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -225,13 +248,13 @@ const BookPortfolio = () => {
               }}
             >
               <HTMLFlipBook
-                width={500}
-                height={600}
+                width={bookWidth}
+                height={bookHeight}
                 size="fixed"
-                minWidth={500}
-                maxWidth={500}
-                minHeight={600}
-                maxHeight={600}
+                minWidth={bookWidth}
+                maxWidth={bookWidth}
+                minHeight={bookHeight}
+                maxHeight={bookHeight}
                 maxShadowOpacity={0.5}
                 showCover={false}
                 mobileScrollSupport={true}
@@ -253,16 +276,14 @@ const BookPortfolio = () => {
                 disableFlipByClick={false}
               >
                 {pages.map((page, index) => (
-                  <div key={index} className="page" >
-                    <PageContent data={page} isLeft={false} />
+                  <div key={index} className="page">
+                    <PageContent data={page} isLeft={false} isMobile={isMobile} />
                   </div>
                 ))}
               </HTMLFlipBook>
             </Box>
           </Box>
         </Box>
-
-     
       </Container>
     </Box>
   );

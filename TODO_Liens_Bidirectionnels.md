@@ -1,7 +1,9 @@
 # TODO: Liens bidirectionnels Compétences ↔ Projets
 
 ## Objectif
-Créer des liens navigables entre les compétences et les projets associés, dans les deux sens.
+Créer des liens navig
+
+ables entre les compétences et les projets associés, dans les deux sens.
 
 ## Plan d'implémentation
 
